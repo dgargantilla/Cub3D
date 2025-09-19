@@ -6,7 +6,7 @@
 /*   By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:29:41 by dgargant          #+#    #+#             */
-/*   Updated: 2025/09/08 11:45:25 by dgargant         ###   ########.fr       */
+/*   Updated: 2025/09/15 09:41:18 by dgargant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,26 @@ typedef struct s_player
 	// initial position
 	int			s_pos_x;
 	int			s_pos_y;
+	
+	//bariable temporal
+	int			c_player;
 }	t_player;
+
+typedef struct s_rgb
+{
+	int			r;
+	int			g;
+	int			b;
+}	t_rgb;
 
 
 typedef struct s_map
 {
+	
 	int			player_x;
 	int			player_y;
+	t_rgb		*floor;
+	t_rgb		*ceilling;
 	
 	char		**map;	
 }	t_map;
@@ -48,6 +61,7 @@ typedef struct s_game
 	
 	t_map			*map;
 	t_player		*player;
+	mlx_image_t		*img;
 }	t_game;
 
 
