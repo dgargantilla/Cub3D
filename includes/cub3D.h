@@ -6,7 +6,7 @@
 /*   By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:29:41 by dgargant          #+#    #+#             */
-/*   Updated: 2025/09/15 09:41:18 by dgargant         ###   ########.fr       */
+/*   Updated: 2025/10/10 09:45:54 by dgargant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+#include <math.h>
+#define PI 3,141592653
+#define BLOCK 64
 # include "../MLX42-master/include/MLX42/MLX42.h"
 //# include "../MLX42-master/include/MLX42/MLX42_Int.h"
 
@@ -27,10 +30,14 @@
 typedef struct s_player
 {
 	// initial position
-	int			s_pos_x;
-	int			s_pos_y;
+	double		s_pos_x;
+	double		s_pos_y;
 	
-	//bariable temporal
+	double		p_ang;
+	//double		ang_x;
+	//double		ang_y;
+	
+	//bariable temporal (color de player)
 	int			c_player;
 }	t_player;
 
