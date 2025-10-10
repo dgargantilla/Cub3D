@@ -3,14 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shirakim <shirakim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:30:01 by dgargant          #+#    #+#             */
-/*   Updated: 2025/09/08 11:41:20 by dgargant         ###   ########.fr       */
+/*   Updated: 2025/10/10 16:41:35 by shirakim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3D.h"
+
+
+void init_variables(t_map *map, char *filename)
+{
+	map->player_x = -1;
+	map->player_y = -1;
+	map->width = 0;
+	map->height = 0;
+	map->text = malloc(sizeof(char) * (ft_strlen(filename) + 1));
+	if (!map->text)
+	{
+		ft_putendl_fd("Error allocating memory for map filename", 2);
+		exit(EXIT_FAILURE);
+	}
+	ft_strlcpy(map->text, filename, ft_strlen(filename) + 1);
+	map->map = NULL;
+}
 
 
 static void ft_error(void)
@@ -91,18 +108,30 @@ t_game	*init_game(t_map *map)
 }
 
 
-int main()
+int main(int ac, char **av)
 {
 	t_map	map;
 	t_game	*game;
+	//int i = 0;
 
+	if (ac < 2)
+	{
+		ft_putendl_fd("Usage: ./cub3D <map_file>", 2);
+		return (1);
+	}
+	
 	game = NULL;
 	/*Deberiamos tener una funcion que inicialice 
 		todo lo que contenga la structura map*/
 	ft_memset(&map, 0, sizeof(t_map));
+	init_variables(&map, av[1]);	
+	// Load the map from the provided file
+	if (load_map(&map) != 0)
+		return (1);	
 	game = init_game(&map);
 	//mlx_loop_hook(mlx, ft_hook, mlx);
 	mlx_loop(game->mlx);
 	mlx_terminate(game->mlx);
+	free(game->map->text);
 	return (EXIT_SUCCESS);
 }

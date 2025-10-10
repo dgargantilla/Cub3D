@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+         #
+#    By: shirakim <shirakim@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/29 08:50:12 by dgargant          #+#    #+#              #
-#    Updated: 2025/08/29 11:15:14 by dgargant         ###   ########.fr        #
+#    Updated: 2025/09/14 14:46:26 by shirakim         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,9 @@ MLX_EX	= $(MLX)/build/libmlx42.a -ldl -lglfw -pthread -lm
 SRCS_DIR    = src/
 
 SRCS_FILES := \
-	cub3D.c
+	cub3D.c \
+	mapa_read.c \
+	get_next_line.c
 
 OBJS_FILES  = $(SRCS_FILES:.c=.o)
 
@@ -47,15 +49,21 @@ OBJS        = $(addprefix $(OBJS_DIR), $(OBJS_FILES))
 
 all: $(NAME)
 
-libmlx:
-	@cmake $(MLX) -B $(MLX)/build && make -C $(MLX)/build -j4
+libft/libft.a:
+	@make -C libft
+	@cp libft/bin/libft.a libft/libft.a
+	@cp libft/bin/libft.a .
+	@echo "$(GREEN)libft.a created!$(RESET)"
+
+
+$(NAME): libmlx libft/libft.a $(OBJS)
+	@echo "Compiling $(BLUE)$(NAME)$(RESET)"
+	@$(CC) $(CFLAGS) $(MLX_IN) $(OBJS) $(MLX_EX) libft.a -o $(NAME)
+	@echo "\n$(GREEN)$(NAME) compiled!$(RESET)"
 	@echo "$(BOLD_CYAN)\n------------\n| Done! 👌 |\n------------$(RESET)"
 
-
-$(NAME): libmlx $(OBJS)
-	@echo "Compiling $(BLUE)$(NAME)$(RESET)"
-	@$(CC) $(CFLAGS) $(MLX_IN) $(OBJS) $(MLX_EX)  -o $(NAME)
-	@echo "\n$(GREEN)$(NAME) compiled!$(RESET)"
+libmlx:
+	@cmake $(MLX) -B $(MLX)/build && make -C $(MLX)/build -j4
 	@echo "$(BOLD_CYAN)\n------------\n| Done! 👌 |\n------------$(RESET)"
 
 $(OBJS_DIR)%.o: $(SRCS_DIR)%.c
