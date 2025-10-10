@@ -36,15 +36,37 @@ typedef struct s_player
 }	t_player;
 
 
+typedef struct s_textures
+{
+    char    *north;
+    char    *south;
+    char    *west;
+    char    *east;
+}   t_textures;
+
+typedef struct s_color
+{
+    int r;
+    int g;
+    int b;
+}   t_color;
+
 typedef struct s_map
 {
-	int			player_x;
-	int			player_y;
-	int			width;
-	int			height;
-	char        *text;
-	char		**map;	
-}	t_map;
+    int         player_x;
+    int         player_y;
+    char        player_dir;    // N, S, E, or W
+    int         width;
+    int         height;
+    char        *text;        // input file path
+    char        **map;        // actual map content
+    t_textures  textures;     // texture paths
+    t_color     floor;        // floor RGB color
+    t_color     ceiling;      // ceiling RGB color
+    int         got_textures; // flags for required elements
+    int         got_colors;
+    int         got_map;
+}   t_map;
 
 
 typedef struct s_check
@@ -65,19 +87,23 @@ typedef struct s_game
 }	t_game;
 
 /* Map parsing functions */
-void upload_map_content(t_map *map);
-int load_map(t_map *map);
-void mapa_dimention(t_map *data);
-void mapa_memory(t_map *data);
-void exit_game(t_map *data, int exit_code);
+void    upload_map_content(t_map *map);
+int     load_map(t_map *map);
+void    mapa_dimention(t_map *data);
+void    mapa_memory(t_map *data);
+void    exit_game(t_map *data, int exit_code);
+
+/* Element parsing functions */
+int     parse_line_element(t_map *data, char *line);
 
 /* Map validation functions */
+int     validate_map(t_map *data);
 t_check *do_check(int height, int width);
-void find_position(t_check *check, t_map *data);
-void flood_fill(int x, int y, t_check *check, t_map *data);
-void free_check(t_check *check, int height);
-void exit_error(char *message);
-void ft_check_borders(t_map *data);
+void    find_position(t_check *check, t_map *data);
+void    flood_fill(int x, int y, t_check *check, t_map *data);
+void    free_check(t_check *check, int height);
+void    exit_error(char *message);
+void    ft_check_borders(t_map *data);
 
 /* Game initialization functions */
 t_game *init_game(t_map *map);

@@ -11,6 +11,7 @@
 # **************************************************************************** #
 
 NAME	   = Cub3D
+TEST_NAME  = test_cub3d
 
 CC          = cc
 
@@ -35,12 +36,16 @@ MLX	= ./MLX42-master
 MLX_IN = -I$(MLX)/include
 MLX_EX	= $(MLX)/build/libmlx42.a -ldl -lglfw -pthread -lm
 
+LIBFT = libft.a
+
 SRCS_DIR    = src/
 
 SRCS_FILES := \
 	cub3D.c \
 	mapa_read.c \
-	get_next_line.c
+	get_next_line.c \
+	map_validation.c \
+	parse_elements.c
 
 OBJS_FILES  = $(SRCS_FILES:.c=.o)
 
@@ -80,5 +85,10 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+test: test_main.c src/mapa_read.c src/get_next_line.c src/map_validation.c $(LIBFT)
+	@echo "$(CYAN)Compiling test program...$(RESET)"
+	$(CC) $(CFLAGS) test_main.c src/mapa_read.c src/get_next_line.c src/map_validation.c $(LIBFT) -o test_cub3d
+	@echo "$(GREEN)Test program compiled!$(RESET)"
+
+.PHONY: all clean fclean re test
 .SILENT: all clean fclean

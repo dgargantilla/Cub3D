@@ -15,18 +15,32 @@
 
 void init_variables(t_map *map, char *filename)
 {
-	map->player_x = -1;
-	map->player_y = -1;
-	map->width = 0;
-	map->height = 0;
-	map->text = malloc(sizeof(char) * (ft_strlen(filename) + 1));
-	if (!map->text)
-	{
-		ft_putendl_fd("Error allocating memory for map filename", 2);
-		exit(EXIT_FAILURE);
-	}
-	ft_strlcpy(map->text, filename, ft_strlen(filename) + 1);
-	map->map = NULL;
+    map->player_x = -1;
+    map->player_y = -1;
+    map->player_dir = 0;
+    map->width = 0;
+    map->height = 0;
+    
+    // Initialize texture pointers
+    map->textures.north = NULL;
+    map->textures.south = NULL;
+    map->textures.west = NULL;
+    map->textures.east = NULL;
+    
+    // Initialize state flags
+    map->got_textures = 0;
+    map->got_colors = 0;
+    map->got_map = 0;
+    
+    // Allocate and copy filename
+    map->text = malloc(sizeof(char) * (ft_strlen(filename) + 1));
+    if (!map->text)
+    {
+        ft_putendl_fd("Error allocating memory for map filename", 2);
+        exit(EXIT_FAILURE);
+    }
+    ft_strlcpy(map->text, filename, ft_strlen(filename) + 1);
+    map->map = NULL;
 }
 
 
