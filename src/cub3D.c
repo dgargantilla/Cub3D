@@ -6,7 +6,7 @@
 /*   By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:30:01 by dgargant          #+#    #+#             */
-/*   Updated: 2025/10/10 10:54:28 by dgargant         ###   ########.fr       */
+/*   Updated: 2025/10/17 12:46:47 by dgargant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,8 +128,8 @@ int mapY = 8;
 
 bool touch(float py, float px, t_game *game)
 {
-	int x = px / BLOCK;
-	int y = py / BLOCK;
+	int x = px / BLOCK2;
+	int y = py / BLOCK2;
 	if(game->map->map[y][x] == '1')
 		return (true);
 	return (false);
@@ -173,7 +173,7 @@ void	draw_map(t_game	*game, int rgb)
 		while (map[y][x])
 		{
 			if (map[y][x] == '1')
-				draw_square(game, x * 64, y * 64, 64, rgb);
+				draw_square(game, x * BLOCK, y * BLOCK, BLOCK, rgb);
 			x++;
 		}
 		y++;
@@ -201,21 +201,66 @@ void draw_background(t_game *game)
 	}
 }
 
+double	distance(double x, double y)
+{
+	return(sqrt((x * x) + (y * y)));
+}
+
+double	fix_distance(t_game *game, double x1, double y1, double x2, double y2)
+{
+	double delta_x = x2 - x1;
+	double delta_y = y2 - y1;
+	double angle = atan2(delta_y, delta_x) - game->player->p_ang;
+	double fix_dist = distance(delta_x, delta_y) * cos(angle);
+	return (fix_dist);
+}
+
+void draw_raycast(t_game *game, double start_x, int rgb, int i)
+{
+	double cos_ang = cos(start_x);
+	double sin_ang = sin(start_x);
+	double ray_y = game->player->s_pos_y;
+	double ray_x = game->player->s_pos_x;
+	while (!touch(ray_y, ray_x, game))
+	{
+		//mlx_put_pixel(game->img, ray_x, ray_y, rgb);
+		ray_x += cos_ang;
+		ray_y += sin_ang;	
+	}
+	double dist = fix_distance( game ,game->player->s_pos_x,
+		game->player->s_pos_y, ray_x, ray_y);
+	if (dist == 0)
+		dist = 0.1;
+	double height = (BLOCK2 / dist) * (W_WIDTH / 2);
+	double start_y = (W_HEIGHT - height) / 2;
+	if (start_y <= 0)
+		start_y = 1;
+	double end = start_y + height;
+	if (end >= W_HEIGHT)
+		end = W_HEIGHT - 1;
+	printf("\nstart_y : %f", start_y);
+	while (start_y < end)
+	{
+		mlx_put_pixel(game->img, i, start_y, rgb);
+		start_y++;
+	}
+}
+
 void move_player(t_game *game)
 {
 	int rgb = get_rgba(255, 0, 255, 255);
 	draw_background(game);
-	draw_map(game, rgb);
+	//draw_map(game, rgb);
 	
 	//char **map = game->map->map;
 	//int x = (int)game->player->s_pos_x / BLOCK;
 	//int y = (int)game->player->s_pos_y / BLOCK;
-	float speed_ang = 0.1;
-	float cos_ang = cos(game->player->p_ang);
-	float sin_ang = sin(game->player->p_ang);
+	double speed_ang = 0.03;
+	double cos_ang = cos(game->player->p_ang);
+	double sin_ang = sin(game->player->p_ang);
 	/*if(mlx_is_key_down(game->mlx, MLX_KEY_W))
 		printf("x %d, y %d", x, y);*/
-	float dob_pi = (PI * 2);
+	double dob_pi = PI * 2;
 
 	/// ROTACION
 	if(mlx_is_key_down(game->mlx, MLX_KEY_RIGHT))
@@ -226,42 +271,46 @@ void move_player(t_game *game)
 		game->player->p_ang = 0;
 	if(game->player->p_ang < 0)
 		game->player->p_ang = dob_pi;
-
+	
 	/// MOVEMENT
 	if(mlx_is_key_down(game->mlx, MLX_KEY_W))
 	{
-		game->player->s_pos_y += sin_ang * 5;
-		game->player->s_pos_x += cos_ang * 5;	
+		game->player->s_pos_y += sin_ang * 3;
+		game->player->s_pos_x += cos_ang * 3;	
 	}
 	if(mlx_is_key_down(game->mlx, MLX_KEY_S))
 	{
-		game->player->s_pos_y -= sin_ang * 5;
-		game->player->s_pos_x -= cos_ang * 5;
+		game->player->s_pos_y -= sin_ang * 3;
+		game->player->s_pos_x -= cos_ang * 3;
 	}
 	if(mlx_is_key_down(game->mlx, MLX_KEY_A))
 	{
-		game->player->s_pos_y -= sin_ang * 5;
-		game->player->s_pos_x += cos_ang * 5;
+		game->player->s_pos_y -= cos_ang * 3;
+		game->player->s_pos_x += sin_ang * 3;
 	}
 	if(mlx_is_key_down(game->mlx, MLX_KEY_D))
 	{
-		game->player->s_pos_y += sin_ang * 5;
-		game->player->s_pos_x -= cos_ang * 5;
+		game->player->s_pos_y += cos_ang * 3;
+		game->player->s_pos_x -= sin_ang * 3;
 	}
 	/*if(mlx_is_key_down(game->mlx, MLX_KEY_W))
-		printf("x %d, y %d", x, y);*/
+	printf("x %d, y %d", x, y);*/
 	
-	float ray_y = game->player->s_pos_y;
-	float ray_x = game->player->s_pos_x;
+	//RAYCAST
 	rgb = get_rgba(0, 0, 255, 255);
-	while (!touch(ray_y, ray_x, game))
+	double	fraction = PI / 3 / W_WIDTH;
+	double	start_x = game->player->p_ang - PI / 6;
+	int i = 0;
+	while (i < W_WIDTH)
 	{
-		mlx_put_pixel(game->img, ray_x, ray_y, rgb);
-		ray_x += cos_ang;
-		ray_y += sin_ang;	
+		draw_raycast(game, start_x, rgb, i);
+		start_x += fraction;
+		i++;
 	}
-	rgb = get_rgba(255, 0, 255, 255);
-	draw_square(game, game->player->s_pos_x, game->player->s_pos_y, 10 , rgb);
+	
+	
+	//rgb = get_rgba(255, 0, 255, 255);
+	//draw_square(game, game->player->s_pos_x, game->player->s_pos_y, BLOCK / 4 , rgb);
 }
 void ft_move_hook(void *param)
 {
@@ -308,8 +357,8 @@ void find_player(t_game *game)
 			c = game->map->map[y][x];
 			if (c == 'P')
 			{
-				game->player->s_pos_y = (double)y *BLOCK;
-				game->player->s_pos_x = (double)x *BLOCK;
+				game->player->s_pos_y = (double)y * BLOCK2;
+				game->player->s_pos_x = (double)x * BLOCK2;
 			}
 			x++;
 		}
@@ -338,11 +387,10 @@ t_game	*init_game(t_map *map)
 	game = malloc(sizeof(t_game));
 	if (!game)
 		return(NULL);
-	mlx_t* mlx = mlx_init( W_WIDTH, W_HEIGHT, "Cub3D", true);
+	mlx_t* mlx = mlx_init(W_WIDTH, W_HEIGHT, "Cub3D", true);
 	if (!mlx)
 		return(NULL);
 	game->mlx = mlx;
-
 	game->map = map;
 	get_map(game);
 	mlx_set_window_limit(game->mlx, W_WIDTH, W_HEIGHT, W_WIDTH, W_HEIGHT);
@@ -355,26 +403,7 @@ t_game	*init_game(t_map *map)
 	find_player(game);
 	printf("posicion x: %f, posicion y: %f", game->player->s_pos_x, game->player->s_pos_y);
 	draw_background(game);
-	//draw_square(game, game->player->s_pos_x, game->player->s_pos_y, 10 , rgb);
 	mlx_loop_hook(game->mlx, ft_move_hook, game);
-	//move_player(game);
-	//mlx_put_pixel(img, 50, 50, rgb);
-	//int rgb =  get_rgba(255, 0, 255, 255);
-	/*int x;
-	int y;
-
-	x = 0;
-	y = 0;
-	while (y <= W_HEIGHT )
-	{
-		x = 0;
-		while (x <= W_WIDTH)
-		{
-			mlx_put_pixel(img, x, y, rgb);
-			x++;
-		}
-		y++;
-	}*/
 	return (game);
 }
 

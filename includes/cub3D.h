@@ -6,7 +6,7 @@
 /*   By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:29:41 by dgargant          #+#    #+#             */
-/*   Updated: 2025/10/10 09:45:54 by dgargant         ###   ########.fr       */
+/*   Updated: 2025/10/16 12:31:54 by dgargant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,9 @@
 #include <string.h>
 #include <unistd.h>
 #include <math.h>
-#define PI 3,141592653
+#define PI 3.141592653
 #define BLOCK 64
+#define BLOCK2 64
 # include "../MLX42-master/include/MLX42/MLX42.h"
 //# include "../MLX42-master/include/MLX42/MLX42_Int.h"
 
