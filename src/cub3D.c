@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../includes/cub3D.h"
+#include "../libft/inc/libft.h"
 
 
 static void ft_error(void)
@@ -352,13 +353,17 @@ void find_player(t_game *game)
 	while (game->map->map[y] != NULL)
 	{
 		x = 0;
-		while (x < 11 )
+		while (game->map->map[y][x] != '\0')
 		{
 			c = game->map->map[y][x];
-			if (c == 'P')
+			if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
 			{
 				game->player->s_pos_y = (double)y * BLOCK2;
 				game->player->s_pos_x = (double)x * BLOCK2;
+				game->map->player_x = x;
+				game->map->player_y = y;
+				game->map->player_dir = c;
+				return; // Found player, exit
 			}
 			x++;
 		}
@@ -392,7 +397,7 @@ t_game	*init_game(t_map *map)
 		return(NULL);
 	game->mlx = mlx;
 	game->map = map;
-	get_map(game);
+	// get_map(game); // REMOVED: map is now loaded in main()
 	mlx_set_window_limit(game->mlx, W_WIDTH, W_HEIGHT, W_WIDTH, W_HEIGHT);
 	mlx_image_t* img = mlx_new_image(game->mlx, W_WIDTH + 1, W_HEIGHT + 1);
 	if (!img || (mlx_image_to_window(game->mlx, img, 0, 0) < 0))
@@ -408,10 +413,16 @@ t_game	*init_game(t_map *map)
 }
 
 
-int main()
+int main(int argc, char **argv)
 {
 	t_map	map;
 	t_game	*game;
+
+	if (argc != 2)
+	{
+		ft_putendl_fd("Error\nUsage: ./Cub3D <map.cub>", 2);
+		return (EXIT_FAILURE);
+	}
 
 	game = NULL;
 	/*Deberiamos tener una funcion que inicialice 
@@ -419,6 +430,14 @@ int main()
 	ft_memset(&map, 0, sizeof(t_map));
 	
 	map.map = NULL;
+	init_variables(&map, argv[1]);
+	
+	if (load_map(&map) != 0)
+	{
+		ft_putendl_fd("Error\nFailed to load map", 2);
+		return (EXIT_FAILURE);
+	}
+	
 	game = init_game(&map);
 	mlx_loop(game->mlx);
 	mlx_terminate(game->mlx);

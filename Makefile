@@ -17,7 +17,7 @@ CC          = cc
 #-fsanitize=thread -g3 -O0
 
 INC         = includes/
-CFLAGS      = -Wall -Wextra -Werror -g3 -I$(INC)
+CFLAGS      = -Wall -Wextra -Werror -g3 -I$(INC) $(LIBFT_IN) $(MLX_IN)
 
 OBJS_DIR    = objs/
 
@@ -35,10 +35,20 @@ MLX	= ./MLX42-master
 MLX_IN = -I$(MLX)/include
 MLX_EX	= $(MLX)/build/libmlx42.a -ldl -lglfw -pthread -lm
 
+LIBFT	= ./libft
+LIBFT_IN = -I$(LIBFT)/inc
+LIBFT_EX	= $(LIBFT)/libft.a
+
 SRCS_DIR    = src/
 
 SRCS_FILES := \
-	cub3D.c
+	cub3D.c \
+	mapa_read.c \
+	get_next_line.c \
+	get_next_line_utils.c \
+	map_validation.c \
+	parse_elements.c \
+	init_variables.c
 
 OBJS_FILES  = $(SRCS_FILES:.c=.o)
 
@@ -54,7 +64,7 @@ libmlx:
 
 $(NAME): libmlx $(OBJS)
 	@echo "Compiling $(BLUE)$(NAME)$(RESET)"
-	@$(CC) $(CFLAGS) $(MLX_IN) $(OBJS) $(MLX_EX)  -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT_EX) $(MLX_EX)  -o $(NAME)
 	@echo "\n$(GREEN)$(NAME) compiled!$(RESET)"
 	@echo "$(BOLD_CYAN)\n------------\n| Done! 👌 |\n------------$(RESET)"
 
