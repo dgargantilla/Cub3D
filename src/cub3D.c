@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shirakim <shirakim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:30:01 by dgargant          #+#    #+#             */
-/*   Updated: 2025/10/17 12:46:47 by dgargant         ###   ########.fr       */
+/*   Updated: 2025/11/15 13:09:15 by shirakim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,17 +185,35 @@ void draw_background(t_game *game)
 {
 	int x;
 	int y;
-	int rgb;
+	int rgb_ceiling;
+	int rgb_floor;
 
 	x = 0;
 	y = 0;
-	rgb =  get_rgba(0, 0, 0, 255);
-	while (y <= W_HEIGHT )
+	
+	// Get ceiling and floor colors from map
+	if (game->map)
+	{
+		rgb_ceiling = get_rgba(game->map->ceilling.r, game->map->ceilling.g, game->map->ceilling.b, 255);
+		rgb_floor = get_rgba(game->map->floor.r, game->map->floor.g, game->map->floor.b, 255);
+	}
+	else
+	{
+		rgb_ceiling = get_rgba(0, 0, 0, 255);  // Default black
+		rgb_floor = get_rgba(0, 0, 0, 255);    // Default black
+	}
+	
+	while (y <= W_HEIGHT)
 	{
 		x = 0;
 		while (x <= W_WIDTH)
 		{
-			mlx_put_pixel(game->img, x, y, rgb);
+			// Draw ceiling in top half
+			if (y < W_HEIGHT / 2)
+				mlx_put_pixel(game->img, x, y, rgb_ceiling);
+			// Draw floor in bottom half
+			else
+				mlx_put_pixel(game->img, x, y, rgb_floor);
 			x++;
 		}
 		y++;
@@ -425,8 +443,6 @@ int main(int argc, char **argv)
 	}
 
 	game = NULL;
-	/*Deberiamos tener una funcion que inicialice 
-		todo lo que contenga la structura map*/
 	ft_memset(&map, 0, sizeof(t_map));
 	
 	map.map = NULL;
@@ -437,7 +453,6 @@ int main(int argc, char **argv)
 		ft_putendl_fd("Error\nFailed to load map", 2);
 		return (EXIT_FAILURE);
 	}
-	
 	game = init_game(&map);
 	mlx_loop(game->mlx);
 	mlx_terminate(game->mlx);

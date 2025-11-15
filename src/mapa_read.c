@@ -30,14 +30,11 @@ static int initialize_map_data(t_map *data)
     }
     free_textures(data);
 
-    // Initialize all pointers to NULL
     data->map = NULL;
     data->textures.north = NULL;
     data->textures.south = NULL;
     data->textures.west = NULL;
     data->textures.east = NULL;
-
-    // Initialize other values
     data->width = 0;
     data->height = 0;
     data->player_x = -1;
@@ -46,7 +43,6 @@ static int initialize_map_data(t_map *data)
     data->got_textures = 0;
     data->got_colors = 0;
     data->got_map = 0;
-
     return (0);
 }
 
@@ -55,44 +51,8 @@ static int read_file_elements(t_map *data)
     int fd;
     char *line;
     int result;
-
-    fd = open(data->text, O_RDONLY);
-    if (fd == -1)
-        return (1);
-
-    while ((line = get_next_line(fd)) != NULL)
-    {
-        result = parse_line_element(data, line);
-        free(line);
-
-        if (result == 1)  // Error
-        {
-            close(fd);
-            return (1);
-        }
-        else if (result == 2)  // Map section started
-            break;
-    }
-
-    // Verify all required elements were found
-    // Temporarily comment out strict validation
-    // if ((data->got_textures != 4) || (data->got_colors != 2))
-    // {
-    //     ft_putendl_fd("Error\nMissing required elements in configuration", 2);
-    //     close(fd);
-    //     return (1);
-    // }
-
-    data->config_parsed = 1; // Mark config as parsed
-    close(fd);
-    return (0);
-}
-
-static int read_map_section(t_map *data)
-{
-    int fd;
-    char *line;
     int map_started = 0;
+    int len;
 
     fd = open(data->text, O_RDONLY);
     if (fd == -1)
@@ -103,34 +63,38 @@ static int read_map_section(t_map *data)
 
     while ((line = get_next_line(fd)) != NULL)
     {
-        // Remove trailing newline
-        int len = ft_strlen(line);
+        len = ft_strlen(line);
         if (line[len - 1] == '\n')
             line[len - 1] = '\0';
 
-        // Check if this line starts the map section
-        if (!map_started)
+        // If config not started yet, parse config lines
+        if (!data->config_parsed)
         {
-            // If config already parsed, skip configuration lines
-            if (data->config_parsed &&
-                (ft_strncmp(line, "NO ", 3) == 0 ||
-                 ft_strncmp(line, "SO ", 3) == 0 ||
-                 ft_strncmp(line, "WE ", 3) == 0 ||
-                 ft_strncmp(line, "EA ", 3) == 0 ||
-                 ft_strncmp(line, "F ", 2) == 0 ||
-                 ft_strncmp(line, "C ", 2) == 0 ||
-                 ft_strlen(line) == 0))
+            result = parse_line_element(data, line);
+            
+            if (result == 1)  // Error
+            {
+                close(fd);
+                free(line);
+                return (1);
+            }
+            else if (result == 2)  // Map section started
+            {
+                map_started = 1;
+                data->config_parsed = 1;
+                // Don't free line yet, we need to process it as first map line
+            }
+            else
             {
                 free(line);
                 continue;
             }
-            // If we reach a line that looks like map content, start counting
-            map_started = 1;
         }
 
+        // Process map section
         if (map_started)
         {
-            // Check for invalid config after map started
+            // Validate no config after map
             if (ft_strncmp(line, "NO ", 3) == 0 ||
                 ft_strncmp(line, "SO ", 3) == 0 ||
                 ft_strncmp(line, "WE ", 3) == 0 ||
@@ -146,16 +110,25 @@ static int read_map_section(t_map *data)
 
             // Count map dimensions
             len = ft_strlen(line);
-            if (len > data->width)
-                data->width = len;
-            data->height++;
+            if (len > 0)
+            {
+                if (len > data->width)
+                    data->width = len;
+                data->height++;
+            }
         }
 
         free(line);
     }
 
-    get_next_line(-1);
     close(fd);
+
+    // Verify colors are present
+    if ((data->got_colors != 2))
+    {
+        ft_putendl_fd("Error\nMissing required colors (F and C)", 2);
+        return (1);
+    }
 
     if (data->height == 0 || data->width == 0)
     {
@@ -172,6 +145,7 @@ static int load_map_content(t_map *data)
     char *line;
     int i = 0;
     int map_started = 0;
+    int len;
 
     fd = open(data->text, O_RDONLY);
     if (fd == -1)
@@ -180,7 +154,7 @@ static int load_map_content(t_map *data)
     while ((line = get_next_line(fd)) != NULL && i < data->height)
     {
         // Remove trailing newline
-        int len = ft_strlen(line);
+        len = ft_strlen(line);
         if (line[len - 1] == '\n')
             line[len - 1] = '\0';
 
@@ -223,7 +197,6 @@ static int load_map_content(t_map *data)
         free(line);
     }
 
-    get_next_line(-1);
     close(fd);
     data->map[i] = NULL; // Null terminate the array
 
@@ -278,12 +251,8 @@ int load_map(t_map *data)
     // Initialize all data
     initialize_map_data(data);
 
-    // First pass: read textures and colors
+    // Single pass: read config, detect map start, and count map dimensions
     if (read_file_elements(data) != 0)
-        return (1);
-
-    // Get map dimensions
-    if (read_map_section(data) != 0)
         return (1);
 
     // Allocate map memory
@@ -293,8 +262,8 @@ int load_map(t_map *data)
     if (load_map_content(data) != 0)
         return (1);
 
-    // Validate map
-    if (validate_map(data) != 0)
+    // Validate map (returns 1 on success, 0 on failure)
+    if (!validate_map(data))
         return (1);
 
     return (0);

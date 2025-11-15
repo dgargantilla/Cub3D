@@ -6,7 +6,7 @@
 /*   By: shirakim <shirakim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 15:05:00 by shirakim          #+#    #+#             */
-/*   Updated: 2025/09/14 15:05:00 by shirakim         ###   ########.fr       */
+/*   Updated: 2025/11/15 13:09:17 by shirakim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,9 +113,16 @@ int	parse_line_element(t_map *data, char *line)
 {
 	char	*trimmed;
 
-	trimmed = ft_strtrim(line, " \t");
+	trimmed = ft_strtrim(line, " \t\n");
 	if (!trimmed)
 		return (1);
+	
+	// Skip empty lines during config parsing
+	if (ft_strlen(trimmed) == 0)
+	{
+		free(trimmed);
+		return (0);
+	}
 	
 	if (ft_strncmp(trimmed, "NO ", 3) == 0)
 	{
@@ -147,10 +154,11 @@ int	parse_line_element(t_map *data, char *line)
 		if (handle_color(trimmed, data, "C"))
 			data->got_colors++;
 	}
-	else if (trimmed[0] != '\0')
+	else
 	{
+		// Non-config line found, map section starts
 		free(trimmed);
-		return (2); // Map section started
+		return (2);
 	}
 	free(trimmed);
 	return (0); // Success, continue parsing config
