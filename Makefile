@@ -6,7 +6,7 @@
 #    By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/29 08:50:12 by dgargant          #+#    #+#              #
-#    Updated: 2025/08/29 11:15:14 by dgargant         ###   ########.fr        #
+#    Updated: 2025/11/24 11:10:40 by dgargant         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,10 @@ MLX_EX	= $(MLX)/build/libmlx42.a -ldl -lglfw -pthread -lm
 SRCS_DIR    = src/
 
 SRCS_FILES := \
-	cub3D.c
+	cub3D.c	\
+	$(addprefix core/, draw_game.c	draw_map.c	draw_utils.c	init_textures.c)	\
+	$(addprefix player/, init_player.c	movement.c)	\
+	$(addprefix utils/, utils.c)	\
 
 OBJS_FILES  = $(SRCS_FILES:.c=.o)
 
