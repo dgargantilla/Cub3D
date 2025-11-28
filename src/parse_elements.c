@@ -1,4 +1,5 @@
 #include "../includes/cub3D.h"
+#include <libgen.h>
 
 static int is_valid_rgb(int r, int g, int b)
 {
@@ -44,7 +45,7 @@ static int parse_rgb(char *str, t_color *color)
     return (0);
 }
 
-static int handle_texture(char *line, char **texture_path)
+static int handle_texture(t_map *data, char *line, char **texture_path)
 {
     while (*line && *line == ' ')
         line++;
@@ -77,6 +78,49 @@ static int handle_texture(char *line, char **texture_path)
     {
         perror("open");
         printf("DEBUG: tried to open texture: '%s' (len=%zu)\n", *texture_path, ft_strlen(*texture_path));
+        /* try fallback candidates */
+        char *basename = strrchr(*texture_path, '/');
+        if (basename)
+            basename++;
+        else
+            basename = *texture_path;
+
+        char cand[512];
+        snprintf(cand, sizeof(cand), "assets/%s", basename);
+        fd = open(cand, O_RDONLY);
+        if (fd != -1)
+        {
+            close(fd);
+            free(*texture_path);
+            *texture_path = ft_strdup(cand);
+            return (0);
+        }
+        snprintf(cand, sizeof(cand), "textures/%s", basename);
+        fd = open(cand, O_RDONLY);
+        if (fd != -1)
+        {
+            close(fd);
+            free(*texture_path);
+            *texture_path = ft_strdup(cand);
+            return (0);
+        }
+        /* try map directory */
+        if (data && data->text)
+        {
+            char tmp[512];
+            char *dup = ft_strdup(data->text);
+            char *dir = dirname(dup);
+            snprintf(tmp, sizeof(tmp), "%s/%s", dir, *texture_path);
+            free(dup);
+            fd = open(tmp, O_RDONLY);
+            if (fd != -1)
+            {
+                close(fd);
+                free(*texture_path);
+                *texture_path = ft_strdup(tmp);
+                return (0);
+            }
+        }
     }
     if (fd == -1)
     {
@@ -105,22 +149,22 @@ int parse_line_element(t_map *data, char *line)
 
     if (ft_strncmp(line, "NO ", 3) == 0)
     {
-        if (handle_texture(line + 3, &data->textures.north) == 0)
+        if (handle_texture(data, line + 3, &data->textures.north) == 0)
             data->got_textures |= 1;
     }
     else if (ft_strncmp(line, "SO ", 3) == 0)
     {
-        if (handle_texture(line + 3, &data->textures.south) == 0)
+        if (handle_texture(data, line + 3, &data->textures.south) == 0)
             data->got_textures |= 2;
     }
     else if (ft_strncmp(line, "WE ", 3) == 0)
     {
-        if (handle_texture(line + 3, &data->textures.west) == 0)
+        if (handle_texture(data, line + 3, &data->textures.west) == 0)
             data->got_textures |= 4;
     }
     else if (ft_strncmp(line, "EA ", 3) == 0)
     {
-        if (handle_texture(line + 3, &data->textures.east) == 0)
+        if (handle_texture(data, line + 3, &data->textures.east) == 0)
             data->got_textures |= 8;
     }
     else if (ft_strncmp(line, "F ", 2) == 0)
