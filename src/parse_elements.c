@@ -59,7 +59,12 @@ static int handle_texture(char *line, char **texture_path)
     if (*texture_path)
         free(*texture_path);
     
-    *texture_path = ft_strdup(line);
+    /* Trim trailing spaces, tabs and CR */
+    char *trimmed = ft_strtrim(line, " \t\r\n");
+    if (!trimmed)
+        return (1);
+    *texture_path = ft_strdup(trimmed);
+    free(trimmed);
     if (!*texture_path)
     {
         ft_putendl_fd("Error: Memory allocation failed", 2);
@@ -68,6 +73,11 @@ static int handle_texture(char *line, char **texture_path)
 
     // Check if file exists and is readable
     int fd = open(*texture_path, O_RDONLY);
+    if (fd == -1)
+    {
+        perror("open");
+        printf("DEBUG: tried to open texture: '%s' (len=%zu)\n", *texture_path, ft_strlen(*texture_path));
+    }
     if (fd == -1)
     {
         ft_putendl_fd("Error: Cannot open texture file", 2);

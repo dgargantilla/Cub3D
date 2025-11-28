@@ -6,7 +6,7 @@
 #    By: shirakim <shirakim@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/29 08:50:12 by dgargant          #+#    #+#              #
-#    Updated: 2025/10/10 23:08:58 by shirakim         ###   ########.fr        #
+#    Updated: 2025/11/28 19:06:08 by shirakim         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,11 +41,14 @@ LIBFT = libft.a
 SRCS_DIR    = src/
 
 SRCS_FILES := \
-	cub3D.c \
-	mapa_read.c \
-	get_next_line.c \
-	map_validation.c \
-	parse_elements.c
+	cub3D.c	\
+	$(addprefix core/, draw_game.c	draw_map.c	draw_utils.c	init_textures.c)	\
+	$(addprefix player/, init_player.c	movement.c)	\
+	$(addprefix utils/, utils.c)	\
+	mapa_read.c	\
+	parse_elements.c	\
+	map_validation.c	\
+	get_next_line.c	\
 
 OBJS_FILES  = $(SRCS_FILES:.c=.o)
 
