@@ -6,7 +6,7 @@
 #    By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/29 08:50:12 by dgargant          #+#    #+#              #
-#    Updated: 2025/11/24 11:10:40 by dgargant         ###   ########.fr        #
+#    Updated: 2025/12/03 09:41:49 by dgargant         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,7 +51,7 @@ OBJS        = $(addprefix $(OBJS_DIR), $(OBJS_FILES))
 all: $(NAME)
 
 libmlx:
-	@cmake $(MLX) -B $(MLX)/build && make -C $(MLX)/build -j4
+	@cmake $(MLX) -B $(MLX)/build && make -s -C $(MLX)/build -j4
 	@echo "$(BOLD_CYAN)\n------------\n| Done! 👌 |\n------------$(RESET)"
 
 
