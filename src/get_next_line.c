@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shirakim <shirakim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 13:01:42 by shirakim          #+#    #+#             */
-/*   Updated: 2025/09/14 14:46:23 by shirakim         ###   ########.fr       */
+/*   Updated: 2025/12/05 14:41:09 by dgargant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libft/inc/libft.h"
+#include "../libft/libft.h"
 #include <stdlib.h>
 #include <unistd.h>
 

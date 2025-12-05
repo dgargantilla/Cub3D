@@ -1,5 +1,5 @@
 #include "../includes/cub3D.h"
-#include "../libft/inc/libft.h"
+#include "../libft/libft.h"
 
 static int is_valid_char(char c)
 {

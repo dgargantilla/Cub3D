@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shirakim <shirakim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:30:01 by dgargant          #+#    #+#             */
-/*   Updated: 2025/11/28 19:56:51 by shirakim         ###   ########.fr       */
+/*   Updated: 2025/12/05 15:00:14 by dgargant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ t_game	*init_game(t_map *map)
 	game->img = img;
 	game->player = init_player(get_rgba(255, 0, 255, 255));
 	find_player(game);
-	game->textures = init_textures(map);
+	game->textures = init_textures();
 	mlx_loop_hook(game->mlx, ft_move_hook, game);
 	return (game);
 }

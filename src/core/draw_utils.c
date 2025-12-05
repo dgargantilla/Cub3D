@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shirakim <shirakim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 11:03:31 by dgargant          #+#    #+#             */
-/*   Updated: 2025/11/28 19:56:48 by shirakim         ###   ########.fr       */
+/*   Updated: 2025/12/05 15:12:27 by dgargant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,10 @@ void	draw_background(t_game *game)
 
 	x = 0;
 	y = 0;
-	rgb = get_rgba(0, 0, 0, 255);
-	rgb2 = get_rgba(50, 255, 255, 50);
+	rgb = get_rgba(game->map->ceiling.r,
+		game->map->ceiling.g, game->map->ceiling.b, 255);
+	rgb2 = get_rgba(game->map->floor.r,
+		game->map->floor.g, game->map->floor.b, 255);
 	while (y <= W_HEIGHT)
 	{
 		x = 0;

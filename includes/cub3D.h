@@ -16,7 +16,7 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <string.h>
-# include "../libft/inc/libft.h"
+# include "../libft/libft.h"
 # include <unistd.h>
 # include <fcntl.h>
 # include <math.h>
@@ -115,6 +115,7 @@ typedef struct s_game
 }               t_game;
 
 /* Map parsing functions */
+char	*get_next_line(int fd);
 void    upload_map_content(t_map *map);
 int     load_map(t_map *map);
 void    mapa_dimention(t_map *data);
@@ -142,7 +143,7 @@ int     get_rgba(int r, int g, int b, int a);
 void    ft_error(void);
 
 /* init */
-t_textures  *init_textures(t_map *map);
+t_textures  *init_textures(void);
 t_game      *init_game(t_map *map);
 void        *ft_memset(void *b, int c, size_t len);
 void        ft_move_hook(void *param);

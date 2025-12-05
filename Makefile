@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: shirakim <shirakim@student.42.fr>          +#+  +:+       +#+         #
+#    By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/29 08:50:12 by dgargant          #+#    #+#              #
-#    Updated: 2025/11/28 19:56:47 by shirakim         ###   ########.fr        #
+#    Updated: 2025/12/05 14:38:52 by dgargant         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,7 +36,9 @@ MLX	= ./MLX42-master
 MLX_IN = -I$(MLX)/include
 MLX_EX	= $(MLX)/build/libmlx42.a -ldl -lglfw -pthread -lm
 
-LIBFT = libft.a
+#LIBFT = libft.a
+LIBFT_DIR   = libft/
+LIBFT       = $(LIBFT_DIR)libft.a
 
 SRCS_DIR    = src/
 
@@ -57,16 +59,20 @@ OBJS        = $(addprefix $(OBJS_DIR), $(OBJS_FILES))
 
 all: $(NAME)
 
-libft/libft.a:
-	@make -C libft
-	@cp libft/bin/libft.a libft/libft.a
-	@cp libft/bin/libft.a .
-	@echo "$(GREEN)libft.a created!$(RESET)"
+#libft/libft.a:
+#	@make -C libft
+#	@cp libft/bin/libft.a libft/libft.a
+#	@cp libft/bin/libft.a .
+#	@echo "$(GREEN)libft.a created!$(RESET)"
+
+$(LIBFT):
+	@echo "Compiling $(BLUE)libft$(RESET)\n"
+	@make -sC $(LIBFT_DIR)
 
 
 $(NAME): libmlx libft/libft.a $(OBJS)
 	@echo "Compiling $(BLUE)$(NAME)$(RESET)"
-	@$(CC) $(CFLAGS) $(MLX_IN) $(OBJS) $(MLX_EX) libft.a -o $(NAME)
+	@$(CC) $(CFLAGS) $(MLX_IN) $(LIBFT) $(OBJS) $(MLX_EX) libft.a -o $(NAME)
 	@echo "\n$(GREEN)$(NAME) compiled!$(RESET)"
 	@echo "$(BOLD_CYAN)\n------------\n| Done! 👌 |\n------------$(RESET)"
 
