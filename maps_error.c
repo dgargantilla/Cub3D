@@ -6,39 +6,13 @@
 /*   By: shirakim <shirakim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 21:20:29 by shirakim          #+#    #+#             */
-/*   Updated: 2025/10/06 21:20:53 by shirakim         ###   ########.fr       */
+/*   Updated: 2025/12/09 23:56:07 by shirakim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3D.h"
 #include "../libft/inc/libft.h"
 
-void	mapa_objects(t_map *data)
-{
-	t_indices	indices;
-
-	indices.j = 0;
-	indices.end = 0;
-	while (data->map[++indices.j])
-	{
-		indices.i = 0;
-		while (data->map[indices.j][++indices.i])
-		{
-			if (data->map[indices.j][indices.i] == 'P')
-			{
-				data->x = indices.i;
-				data->y = indices.j;
-				data->player++;
-			}
-			else if (data->map[indices.j][indices.i] == 'C')
-				data->colectables++;
-			else if (data->map[indices.j][indices.i] == 'E')
-				indices.end++;
-		}
-	}
-	if (data->player != 1 || data->colectables < 1 || indices.end != 1)
-		exit_error("Bad elements");
-}
 
 void	exit_error(char *message)
 {

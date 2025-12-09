@@ -1,5 +1,17 @@
 #include "../includes/cub3D.h"
-#include <libgen.h>
+
+static char *get_dirname(char *path)
+{
+    char *last_slash = ft_strrchr(path, '/');
+    if (!last_slash)
+        return ft_strdup(".");
+    size_t len = last_slash - path;
+    char *dir = malloc(len + 1);
+    if (!dir)
+        return NULL;
+    ft_strlcpy(dir, path, len + 1);
+    return dir;
+}
 
 static int is_valid_rgb(int r, int g, int b)
 {
@@ -85,46 +97,53 @@ static int handle_texture(t_map *data, char *line, char **texture_path)
         else
             basename = *texture_path;
 
-        char cand[512];
-        snprintf(cand, sizeof(cand), "assets/%s", basename);
+        char *cand = ft_strjoin("assets/", basename);
         fd = open(cand, O_RDONLY);
         if (fd != -1)
         {
             close(fd);
             free(*texture_path);
             *texture_path = ft_strdup(cand);
+            free(cand);
             return (0);
         }
-        snprintf(cand, sizeof(cand), "textures/%s", basename);
+        free(cand);
+        cand = ft_strjoin("textures/", basename);
         fd = open(cand, O_RDONLY);
         if (fd != -1)
         {
             close(fd);
             free(*texture_path);
             *texture_path = ft_strdup(cand);
+            free(cand);
             return (0);
         }
+        free(cand);
         /* try map directory */
         if (data && data->text)
         {
-            char tmp[512];
             char *dup = ft_strdup(data->text);
-            char *dir = dirname(dup);
-            snprintf(tmp, sizeof(tmp), "%s/%s", dir, *texture_path);
+            char *dir = get_dirname(dup);
             free(dup);
+            char *tmp = ft_strjoin(ft_strjoin(dir, "/"), *texture_path);
+            free(dir);
             fd = open(tmp, O_RDONLY);
             if (fd != -1)
             {
                 close(fd);
                 free(*texture_path);
                 *texture_path = ft_strdup(tmp);
+                free(tmp);
                 return (0);
             }
+            free(tmp);
         }
     }
     if (fd == -1)
     {
         ft_putendl_fd("Error: Cannot open texture file", 2);
+        free(*texture_path);
+        *texture_path = NULL;
         return (1);
     }
     close(fd);

@@ -1,43 +1,13 @@
 #include "../includes/cub3D.h"
-#include "../libft/libft.h"
+# include "../libft/inc/libft.h"
 
-static int is_valid_char(char c)
-{
-    return (c == '0' || c == '1' || c == 'N' || c == 'S' || c == 'E' || c == 'W' || c == ' ');
-}
 
 static int validate_borders(t_map *data)
 {
-    int i;
-    int j;
-
-    // Check first and last row - must be all '1's
-    for (j = 0; j < data->width; j++)
-    {
-        if (j >= (int)ft_strlen(data->map[0]))
-            return (0);
-        if (data->map[0][j] != '1')
-            return (0);
-    }
-
-    // Check last row
-    for (j = 0; j < data->width; j++)
-    {
-        if (j >= (int)ft_strlen(data->map[data->height - 1]))
-            return (0);
-        if (data->map[data->height - 1][j] != '1')
-            return (0);
-    }
-
-    // Check first and last column of each row
-    for (i = 0; i < data->height; i++)
-    {
-        if (data->map[i][0] != '1')
-            return (0);
-        if (data->map[i][data->width - 1] != '1')
-            return (0);
-    }
-
+    if (!validate_top_bottom_borders(data))
+        return (0);
+    if (!validate_sides_borders(data))
+        return (0);
     return (1);
 }
 
@@ -45,11 +15,15 @@ static int validate_player(t_map *data)
 {
     int i;
     int j;
-    int player_count = 0;
+    int player_count;
+    
+    player_count = 0;
 
-    for (i = 0; i < data->height; i++)
+    i = 0;
+    while (i < data->height)
     {
-        for (j = 0; j < data->width; j++)
+        j = 0;
+        while (j < data->width)
         {
             if (data->map[i][j] == 'N' || data->map[i][j] == 'S' ||
                 data->map[i][j] == 'E' || data->map[i][j] == 'W')
@@ -59,21 +33,11 @@ static int validate_player(t_map *data)
                 data->player_y = i;
                 data->player_dir = data->map[i][j];
             }
+            j++;
         }
+        i++;
     }
-
-    if (player_count == 0)
-    {
-        ft_putendl_fd("Error: No player (P) found in map", 2);
-        return (0);
-    }
-    if (player_count > 1)
-    {
-        ft_putendl_fd("Error: Multiple players found in map", 2);
-        return (0);
-    }
-
-    return (1);
+    return (check_player_count(player_count));
 }
 
 static int validate_characters(t_map *data)
@@ -81,16 +45,23 @@ static int validate_characters(t_map *data)
     int i;
     int j;
 
-    for (i = 0; i < data->height; i++)
+    i = 0;
+    while (i < data->height)
     {
-        for (j = 0; j < data->width; j++)
+        j = 0;
+        while (j < data->width)
         {
-            if (!is_valid_char(data->map[i][j]))
+            if (!(data->map[i][j] == '0' || data->map[i][j] == '1' ||
+                  data->map[i][j] == 'N' || data->map[i][j] == 'S' ||
+                  data->map[i][j] == 'E' || data->map[i][j] == 'W' ||
+                  data->map[i][j] == ' '))
             {
                 ft_putendl_fd("Error: Invalid character in map", 2);
                 return (0);
             }
+            j++;
         }
+        i++;
     }
 
     return (1);
@@ -101,9 +72,11 @@ static int validate_map_space(t_map *data)
     int i;
     int j;
 
-    for (i = 1; i < data->height - 1; i++)
+    i = 1;
+    while (i < data->height - 1)
     {
-        for (j = 1; j < data->width - 1; j++)
+        j = 1;
+        while (j < data->width - 1)
         {
             if (data->map[i][j] == '0' || data->map[i][j] == 'P')
             {
@@ -115,7 +88,9 @@ static int validate_map_space(t_map *data)
                     return (0);
                 }
             }
+            j++;
         }
+        i++;
     }
 
     return (1);

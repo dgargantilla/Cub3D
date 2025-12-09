@@ -3,20 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shirakim <shirakim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 13:01:42 by shirakim          #+#    #+#             */
-/*   Updated: 2025/12/05 14:41:09 by dgargant         ###   ########.fr       */
+/*   Updated: 2025/12/10 00:09:58 by shirakim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libft/libft.h"
+# include "../libft/inc/libft.h"
 #include <stdlib.h>
 #include <unistd.h>
 
-#ifndef BUFFER_SIZE
-# define BUFFER_SIZE 1024
-#endif
 
 static char	*join_and_free(char *storage, char *buffer)
 {

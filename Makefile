@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+         #
+#    By: shirakim <shirakim@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/29 08:50:12 by dgargant          #+#    #+#              #
-#    Updated: 2025/12/05 14:38:52 by dgargant         ###   ########.fr        #
+#    Updated: 2025/12/10 00:30:40 by shirakim         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,9 +47,8 @@ SRCS_FILES := \
 	$(addprefix core/, draw_game.c	draw_map.c	draw_utils.c	init_textures.c)	\
 	$(addprefix player/, init_player.c	movement.c)	\
 	$(addprefix utils/, utils.c)	\
-	mapa_read.c	\
-	parse_elements.c	\
-	map_validation.c	\
+	$(addprefix map/, mapa_read.c	map_loading.c	map_init.c	map_cleanup.c	map_validation.c	maps_validations_utils.c)	\
+	$(addprefix parsing/, element_parsing.c	parse_elements.c)	\
 	get_next_line.c	\
 
 OBJS_FILES  = $(SRCS_FILES:.c=.o)
@@ -94,10 +93,5 @@ fclean: clean
 
 re: fclean all
 
-test: test_main.c src/mapa_read.c src/get_next_line.c src/map_validation.c $(LIBFT)
-	@echo "$(CYAN)Compiling test program...$(RESET)"
-	$(CC) $(CFLAGS) test_main.c src/mapa_read.c src/get_next_line.c src/map_validation.c $(LIBFT) -o test_cub3d
-	@echo "$(GREEN)Test program compiled!$(RESET)"
-
-.PHONY: all clean fclean re test
+.PHONY: all clean fclean re
 .SILENT: all clean fclean
