@@ -6,11 +6,12 @@
 #    By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/29 08:50:12 by dgargant          #+#    #+#              #
-#    Updated: 2025/08/29 11:15:14 by dgargant         ###   ########.fr        #
+#    Updated: 2025/12/08 10:59:19 by dgargant         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	   = Cub3D
+TEST_NAME  = test_cub3d
 
 CC          = cc
 
@@ -35,10 +36,21 @@ MLX	= ./MLX42-master
 MLX_IN = -I$(MLX)/include
 MLX_EX	= $(MLX)/build/libmlx42.a -ldl -lglfw -pthread -lm
 
+#LIBFT = libft.a
+LIBFT_DIR   = ./libft/
+LIBFT       = $(LIBFT_DIR)libft.a
+
 SRCS_DIR    = src/
 
 SRCS_FILES := \
-	cub3D.c
+	cub3D.c	\
+	$(addprefix core/, draw_game.c	draw_map.c	draw_utils.c	init_textures.c)	\
+	$(addprefix player/, init_player.c	movement.c)	\
+	$(addprefix utils/, utils.c)	\
+	mapa_read.c	\
+	parse_elements.c	\
+	map_validation.c	\
+	get_next_line.c	\
 
 OBJS_FILES  = $(SRCS_FILES:.c=.o)
 
@@ -47,15 +59,25 @@ OBJS        = $(addprefix $(OBJS_DIR), $(OBJS_FILES))
 
 all: $(NAME)
 
-libmlx:
-	@cmake $(MLX) -B $(MLX)/build && make -C $(MLX)/build -j4
+#libft/libft.a:
+#	@make -C libft
+#	@cp libft/bin/libft.a libft/libft.a
+#	@cp libft/bin/libft.a .
+#	@echo "$(GREEN)libft.a created!$(RESET)"
+
+$(LIBFT):
+	@echo "Compiling $(BLUE)libft$(RESET)\n"
+	@make -sC $(LIBFT_DIR)
+
+
+$(NAME): libmlx libft/libft.a $(OBJS)
+	@echo "Compiling $(BLUE)$(NAME)$(RESET)"
+	@$(CC) $(CFLAGS) $(MLX_IN) $(OBJS) $(MLX_EX) $(LIBFT) -o $(NAME)
+	@echo "\n$(GREEN)$(NAME) compiled!$(RESET)"
 	@echo "$(BOLD_CYAN)\n------------\n| Done! 👌 |\n------------$(RESET)"
 
-
-$(NAME): libmlx $(OBJS)
-	@echo "Compiling $(BLUE)$(NAME)$(RESET)"
-	@$(CC) $(CFLAGS) $(MLX_IN) $(OBJS) $(MLX_EX)  -o $(NAME)
-	@echo "\n$(GREEN)$(NAME) compiled!$(RESET)"
+libmlx:
+	@cmake $(MLX) -B $(MLX)/build && make -C $(MLX)/build -j4
 	@echo "$(BOLD_CYAN)\n------------\n| Done! 👌 |\n------------$(RESET)"
 
 $(OBJS_DIR)%.o: $(SRCS_DIR)%.c
@@ -72,5 +94,10 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+test: test_main.c src/mapa_read.c src/get_next_line.c src/map_validation.c $(LIBFT)
+	@echo "$(CYAN)Compiling test program...$(RESET)"
+	$(CC) $(CFLAGS) test_main.c src/mapa_read.c src/get_next_line.c src/map_validation.c $(LIBFT) -o test_cub3d
+	@echo "$(GREEN)Test program compiled!$(RESET)"
+
+.PHONY: all clean fclean re test
 .SILENT: all clean fclean
