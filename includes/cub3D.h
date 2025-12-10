@@ -116,10 +116,18 @@ typedef struct s_game
 
 /* Map parsing functions */
 char	*get_next_line(int fd);
-void    upload_map_content(t_map *map);
-int     load_map(t_map *map);
-void    mapa_dimention(t_map *data);
+int     load_map(t_map *data);
+int     initialize_map_data(t_map *data);
+int     read_file_elements(t_map *data);
+int     load_map_content(t_map *data);
 void    mapa_memory(t_map *data);
+void    free_textures(t_map *data);
+int     is_config_line(char *line);
+char    *skip_config_lines(int fd);
+int     load_map_lines(t_map *data, int fd, char *first_line);
+int     process_line_for_elements(t_map *data, char *line, int *map_started);
+int     validate_elements_after_read(t_map *data);
+void    free_map_array(t_map *data);
 void    exit_game(t_map *data, int exit_code);
 
 /* Element parsing functions */
@@ -133,6 +141,9 @@ void    flood_fill(int x, int y, t_check *check, t_map *data);
 void    free_check(t_check *check, int height);
 void    exit_error(char *message);
 void    ft_check_borders(t_map *data);
+int     validate_top_bottom_borders(t_map *data);
+int     validate_sides_borders(t_map *data);
+int     check_player_count(int player_count);
 
 /* Game initialization functions */
 t_game *init_game(t_map *map);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   movement.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shirakim <shirakim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 11:01:45 by dgargant          #+#    #+#             */
-/*   Updated: 2025/11/28 19:56:52 by shirakim         ###   ########.fr       */
+/*   Updated: 2025/12/10 12:21:45 by dgargant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,10 +88,10 @@ void	move_player(t_game *game)
 	left_right_movement(game);
 	handle_rotation(game);
 	render_view(game);
-	draw_map(game);
+	//draw_map(game);
 	x = (game->player->s_pos_x / BLOCK2) * BLOCK;
 	y = (game->player->s_pos_y / BLOCK2) * BLOCK;
-	draw_square(game, x, y, BLOCK / 4);
+	//draw_square(game, x, y, BLOCK / 4);
 	game->player->x = game->player->s_pos_x / BLOCK2;
 	game->player->y = game->player->s_pos_y / BLOCK2;
 	game->player->direction = game->player->p_ang * (180 / PI);
