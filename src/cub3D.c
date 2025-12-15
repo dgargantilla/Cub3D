@@ -6,7 +6,7 @@
 /*   By: shirakim <shirakim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:30:01 by dgargant          #+#    #+#             */
-/*   Updated: 2025/12/10 00:07:20 by shirakim         ###   ########.fr       */
+/*   Updated: 2025/12/12 11:54:12 by shirakim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,10 @@ t_game	*init_game(t_map *map)
 		return (NULL);
 	mlx = mlx_init(W_WIDTH, W_HEIGHT, "Cub3D", true);
 	if (!mlx)
+	{
+		free(game);
 		return (NULL);
+	}
 	init_game_fields(game, mlx, map);
 	if (!game->map->map)
 		get_map(game);
@@ -108,11 +111,22 @@ int	main(int ac, char **av)
 	if (load_map(&map) != 0)
 	{
 		ft_putendl_fd("Failed to load map", 2);
+		get_next_line(-1);
+		free_map_array(&map);
+		free_textures(&map);
 		return (1);
 	}
 	game = init_game(&map);
 	mlx_loop(game->mlx);
 	mlx_terminate(game->mlx);
-	free(game->map->text);
+	// Free all allocated resources
+	if (game->textures)
+		free_mlx_textures(game->textures);
+	if (game->player)
+		free(game->player);
+	get_next_line(-1);
+	free_map_array(game->map);
+	free_textures(game->map);
+	free(game);
 	return (EXIT_SUCCESS);
 }

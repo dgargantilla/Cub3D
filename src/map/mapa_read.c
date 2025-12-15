@@ -7,6 +7,7 @@ int load_map(t_map *data)
     if (read_file_elements(data) != 0)
     {
         printf("Error reading file elements\n");
+        free_textures(data);
         return (1);
     }
     mapa_memory(data);
@@ -14,12 +15,14 @@ int load_map(t_map *data)
     {
         printf("Error loading map content\n");
         free_map_array(data);
+        free_textures(data);
         return (1);
     }
     if (validate_map(data) != 0)
     {
         printf("Map validation failed\n");
         free_map_array(data);
+        free_textures(data);
         return (1);
     }
     return (0);

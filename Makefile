@@ -6,7 +6,7 @@
 #    By: shirakim <shirakim@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/29 08:50:12 by dgargant          #+#    #+#              #
-#    Updated: 2025/12/10 00:48:49 by shirakim         ###   ########.fr        #
+#    Updated: 2025/12/12 11:54:09 by shirakim         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ CC          = cc
 #-fsanitize=thread -g3 -O0
 
 INC         = includes/
-CFLAGS      = -Wall -Wextra -Werror -g3 -I$(INC)
+CFLAGS      = -Wall -Wextra -Werror -g3 -I$(INC) -fsanitize=address
 
 OBJS_DIR    = objs/
 

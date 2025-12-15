@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_textures.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shirakim <shirakim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 12:47:22 by dgargant          #+#    #+#             */
-/*   Updated: 2025/12/05 14:49:07 by dgargant         ###   ########.fr       */
+/*   Updated: 2025/12/12 11:54:12 by shirakim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,4 +44,19 @@ t_textures	*init_textures(void)
 	texture->wall_east = mlx_load_png("./assets/gato12.png");
 	texture->wall_west = mlx_load_png("./assets/gato21.png");
 	return (texture);
+}
+
+void	free_mlx_textures(t_textures *textures)
+{
+	if (!textures)
+		return ;
+	if (textures->wall_north)
+		mlx_delete_texture(textures->wall_north);
+	if (textures->wall_south)
+		mlx_delete_texture(textures->wall_south);
+	if (textures->wall_east)
+		mlx_delete_texture(textures->wall_east);
+	if (textures->wall_west)
+		mlx_delete_texture(textures->wall_west);
+	free(textures);
 }

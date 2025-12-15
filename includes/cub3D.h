@@ -157,6 +157,7 @@ void    ft_error(void);
 
 /* init */
 t_textures  *init_textures(void);
+void        free_mlx_textures(t_textures *textures);
 t_game      *init_game(t_map *map);
 void        *ft_memset(void *b, int c, size_t len);
 void        ft_move_hook(void *param);
