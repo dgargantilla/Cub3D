@@ -34,6 +34,9 @@ static int parse_rgb(char *str, t_color *color)
     
     if (count != 3)
     {
+        for (int i = 0; parts[i]; i++)
+            free(parts[i]);
+        free(parts);
         ft_putendl_fd("Error: Invalid RGB format (should be R,G,B)", 2);
         return (1);
     }
