@@ -154,13 +154,14 @@ int     get_rgba(int r, int g, int b, int a);
 void    ft_error(void);
 
 /* init */
-t_textures  *init_textures(void);
+t_textures  *init_textures(t_game *game);
 t_game      *init_game(t_map *map);
-void        *ft_memset(void *b, int c, size_t len);
+//void        *ft_memset(void *b, int c, size_t len);
 void        ft_move_hook(void *param);
-void        get_map(t_game *game);
+//void        get_map(t_game *game);
 
 /* Init player */
+void	    check_orientation(t_game *game, char c);
 void        find_player(t_game *game);
 t_player    *init_player(int rgb);
 
@@ -187,5 +188,8 @@ void        forward_backward_movement(t_game *game, float cos_angle,
 void        left_right_movement(t_game *game);
 void        handle_rotation(t_game *game);
 void        move_player(t_game *game);
+
+/*Destroy*/
+void	destroy_all(t_game *game);
 
 #endif

@@ -77,9 +77,9 @@ static int handle_texture(t_map *data, char *line, char **texture_path)
     if (fd == -1)
     {
         perror("open");
-        printf("DEBUG: tried to open texture: '%s' (len=%zu)\n", *texture_path, ft_strlen(*texture_path));
+        ft_printf("DEBUG: tried to open texture: '%s' (len=%zu)\n", *texture_path, ft_strlen(*texture_path));
         /* try fallback candidates */
-        char *basename = strrchr(*texture_path, '/');
+        char *basename = ft_strrchr(*texture_path, '/');
         if (basename)
             basename++;
         else
@@ -109,7 +109,9 @@ static int handle_texture(t_map *data, char *line, char **texture_path)
         {
             char tmp[512];
             char *dup = ft_strdup(data->text);
+            //no se puede utilizar esta funcion
             char *dir = dirname(dup);
+            //no se puede utilizar esta funcion
             snprintf(tmp, sizeof(tmp), "%s/%s", dir, *texture_path);
             free(dup);
             fd = open(tmp, O_RDONLY);

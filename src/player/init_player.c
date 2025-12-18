@@ -6,7 +6,7 @@
 /*   By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 10:22:40 by dgargant          #+#    #+#             */
-/*   Updated: 2025/11/26 14:38:35 by dgargant         ###   ########.fr       */
+/*   Updated: 2025/12/15 11:51:59 by dgargant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ void	check_orientation(t_game *game, char c)
 	if (c == 'N')
 		game->player->p_ang = PI + (PI / 2);
 	else if (c == 'S')
-		game->player->p_ang = PI * 2;
-	else if (c == 'E')
 		game->player->p_ang = PI / 2;
+	else if (c == 'E')
+		game->player->p_ang = PI * 2;
 	else
 		game->player->p_ang = PI;
 }

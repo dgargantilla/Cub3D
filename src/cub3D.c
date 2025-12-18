@@ -6,14 +6,14 @@
 /*   By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:30:01 by dgargant          #+#    #+#             */
-/*   Updated: 2025/12/08 10:38:28 by dgargant         ###   ########.fr       */
+/*   Updated: 2025/12/15 11:47:31 by dgargant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 #include "../libft/libft.h"
 
-void	*ft_memset(void *b, int c, size_t len)
+/*void	*ft_memset(void *b, int c, size_t len)
 {
 	unsigned char	*p;
 
@@ -21,7 +21,7 @@ void	*ft_memset(void *b, int c, size_t len)
 	while (len-- > 0)
 		*p++ = (unsigned char)c;
 	return (b);
-}
+}*/
 
 void	ft_move_hook(void *param)
 {
@@ -30,13 +30,14 @@ void	ft_move_hook(void *param)
 	game = (t_game *)param;
 	if (mlx_is_key_down(game->mlx, MLX_KEY_ESCAPE))
 	{
-		mlx_close_window(game->mlx);
-		return ;
+		//mlx_close_window(game->mlx);
+		//return ;
+		destroy_all(game);
 	}
 	move_player(game);
 }
 
-void	get_map(t_game *game)
+/*void	get_map(t_game *game)
 {
 	game->map->map = malloc(sizeof(char *) * 11);
 	game->map->map[0] = "11111111111";
@@ -52,27 +53,21 @@ void	get_map(t_game *game)
 	game->map->map[10] = NULL;
 	game->map->width = 11;
 	game->map->height = 11;
-}
+}*/
 
 t_game	*init_game(t_map *map)
 {
 	t_game	*game;
 
-	game = malloc(sizeof(t_game));
+	game = ft_calloc(1,sizeof(t_game));
 	if (!game)
 		return (NULL);
 	mlx_t *mlx = mlx_init(W_WIDTH, W_HEIGHT, "Cub3D", true);
 	if (!mlx)
 		return(NULL);
 	game->side = 1;
-	game->tex_x = 0;
-	game->tex_y = 0;
-	game->tex_pos = 0;
 	game->mlx = mlx;
 	game->map = map;
-	/* If no map was parsed, fallback to builtin demo map */
-	if (!game->map->map)
-		get_map(game);
 	mlx_set_window_limit(game->mlx, W_WIDTH, W_HEIGHT, W_WIDTH, W_HEIGHT);
 	mlx_image_t* img = mlx_new_image(game->mlx, W_WIDTH + 1, W_HEIGHT + 1);
 	if (!img || (mlx_image_to_window(game->mlx, img, 0, 0) < 0))
@@ -80,7 +75,8 @@ t_game	*init_game(t_map *map)
 	game->img = img;
 	game->player = init_player(get_rgba(255, 0, 255, 255));
 	find_player(game);
-	game->textures = init_textures();
+	check_orientation(game, game->map->player_dir);
+	game->textures = init_textures(game);
 	mlx_loop_hook(game->mlx, ft_move_hook, game);
 	return (game);
 }
@@ -89,14 +85,12 @@ int	main(int ac, char **av)
 {
 	t_map	map;
 	t_game	*game;
-	//int i = 0;
 
 	if (ac < 2)
 	{
 		ft_putendl_fd("Usage: ./cub3D <map_file>", 2);
 		return (1);
 	}
-	
 	game = NULL;
 	ft_memset(&map, 0, sizeof(t_map));
 	map.map = NULL;
@@ -110,7 +104,6 @@ int	main(int ac, char **av)
 	}
 	game = init_game(&map);
 	mlx_loop(game->mlx);
-	mlx_terminate(game->mlx);
-	free(game->map->text);
+	destroy_all(game);
 	return (EXIT_SUCCESS);
 }

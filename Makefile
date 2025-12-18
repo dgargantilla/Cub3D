@@ -6,7 +6,7 @@
 #    By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/29 08:50:12 by dgargant          #+#    #+#              #
-#    Updated: 2025/12/10 11:56:56 by dgargant         ###   ########.fr        #
+#    Updated: 2025/12/15 10:25:49 by dgargant         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,10 +15,10 @@ TEST_NAME  = test_cub3d
 
 CC          = cc
 
-#-fsanitize=thread -g3 -O0
+#-fsanitize=leak -g3 -O0
 
 INC         = includes/
-CFLAGS      = -Wall -Wextra -Werror -g3 -I$(INC)
+CFLAGS      = -Wall -Wextra -Werror -fsanitize=leak -g3 -I$(INC)
 
 OBJS_DIR    = objs/
 
@@ -44,7 +44,7 @@ SRCS_DIR    = src/
 
 SRCS_FILES := \
 	cub3D.c	\
-	$(addprefix core/, draw_game.c	draw_map.c	draw_utils.c	init_textures.c)	\
+	$(addprefix core/, draw_game.c	draw_map.c	draw_utils.c	init_textures.c	destroy.c)	\
 	$(addprefix player/, init_player.c	movement.c)	\
 	$(addprefix utils/, utils.c)	\
 	$(addprefix map/, mapa_read.c	map_loading.c	map_init.c	map_cleanup.c	map_validation.c	maps_validations_utils.c)	\

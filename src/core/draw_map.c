@@ -6,7 +6,7 @@
 /*   By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 11:10:17 by dgargant          #+#    #+#             */
-/*   Updated: 2025/11/26 14:24:32 by dgargant         ###   ########.fr       */
+/*   Updated: 2025/12/18 10:51:39 by dgargant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	draw_square(t_game *game, int x, int y, int size)
 	int	rgb;
 
 	i = 0;
-	rgb = get_rgba(255, 0, 255, 255);
+	rgb = get_rgba(0, 0, 0, 255);
 	while (i++ < size)
 		mlx_put_pixel(game->img, x + i, y, rgb);
 	i = 0;
@@ -41,6 +41,8 @@ void	draw_map(t_game	*game)
 	y = 0;
 	x = 0;
 	map = game->map->map;
+	if (game->map->width > 50 || game->map->height > 50)
+		return;
 	while (map[y])
 	{
 		x = 0;
