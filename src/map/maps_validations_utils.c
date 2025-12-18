@@ -1,5 +1,4 @@
 #include "../includes/cub3D.h"
-# include "../libft/libft.h"
 
 int validate_top_bottom_borders(t_map *data)
 {

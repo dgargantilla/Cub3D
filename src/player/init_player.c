@@ -6,7 +6,7 @@
 /*   By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 10:22:40 by dgargant          #+#    #+#             */
-/*   Updated: 2025/12/18 12:11:18 by dgargant         ###   ########.fr       */
+/*   Updated: 2025/12/18 12:10:39 by dgargant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	find_player(t_game *game)
 	while (game->map->map[y] != NULL)
 	{
 		x = 0;
-		while (x < game->map->width)
+		while (x <= game->map->width)
 		{
 			c = game->map->map[y][x];
 			if (c == 'N' || c == 'S' || c == 'E' || c == 'W' )

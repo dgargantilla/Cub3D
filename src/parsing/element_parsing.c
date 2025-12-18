@@ -1,5 +1,4 @@
 #include "../includes/cub3D.h"
-# include "../libft/libft.h"
 
 int process_line_for_elements(t_map *data, char *line, int *map_started)
 {
@@ -34,6 +33,12 @@ int validate_elements_after_read(t_map *data)
         ft_putendl_fd("Error: No map found in file", 2);
         return (1);
     }
+    // Validate maximum map dimensions (150 width x 10 height)
+    if (data->width >= 150 || data->height >= 150)
+    {
+        ft_putendl_fd("Error: Map dimensions exceed limits (max 150 width x 150 height)", 2);
+        return (1);
+    }
     return (0);
 }
 
@@ -42,25 +47,25 @@ int read_file_elements(t_map *data)
     int fd;
     char *line;
     int map_started = 0;
+    int flag;
 
+    flag = 0;
     fd = open(data->text, O_RDONLY);
     if (fd == -1)
         return (1);
     data->width = 0;
     data->height = 0;
-
     while ((line = get_next_line(fd)) != NULL)
     {
         if (process_line_for_elements(data, line, &map_started) == 1)
         {
             free(line);
-            close(fd);
-            // Clear GNL static by reading rest
-            while (get_next_line(fd) != NULL);
-            return (1);
+            flag = 1;
         }
         free(line);
     }
     close(fd);
+    if (flag == 1)
+        return (1);
     return (validate_elements_after_read(data));
 }

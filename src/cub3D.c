@@ -6,22 +6,12 @@
 /*   By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:30:01 by dgargant          #+#    #+#             */
-/*   Updated: 2025/12/15 11:47:31 by dgargant         ###   ########.fr       */
+/*   Updated: 2025/12/18 14:13:56 by dgargant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 #include "../libft/libft.h"
-
-/*void	*ft_memset(void *b, int c, size_t len)
-{
-	unsigned char	*p;
-
-	p = b;
-	while (len-- > 0)
-		*p++ = (unsigned char)c;
-	return (b);
-}*/
 
 void	ft_move_hook(void *param)
 {
@@ -36,24 +26,6 @@ void	ft_move_hook(void *param)
 	}
 	move_player(game);
 }
-
-/*void	get_map(t_game *game)
-{
-	game->map->map = malloc(sizeof(char *) * 11);
-	game->map->map[0] = "11111111111";
-	game->map->map[1] = "10000000001";
-	game->map->map[2] = "10000000001";
-	game->map->map[3] = "10001111001";
-	game->map->map[4] = "10000N01001";
-	game->map->map[5] = "10000001001";
-	game->map->map[6] = "10000000001";
-	game->map->map[7] = "10001000001";
-	game->map->map[8] = "10001000001";
-	game->map->map[9] = "11111111111";
-	game->map->map[10] = NULL;
-	game->map->width = 11;
-	game->map->height = 11;
-}*/
 
 t_game	*init_game(t_map *map)
 {
@@ -99,6 +71,7 @@ int	main(int ac, char **av)
 		return (1);
 	if (load_map(&map) != 0)
 	{
+		free(map.text);
 		ft_putendl_fd("Failed to load map", 2);
 		return (1);
 	}
