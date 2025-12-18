@@ -68,7 +68,7 @@ int	check_direction(t_game *game, int sx, int sy, int dir)
 	if (is_touching(game, end_x - sx, end_y)
 		|| is_touching(game, end_x - sx, end_y - sy))
 	{
-		game->tex_x = (int)end_x % BLOCK2;
+		game->tex_x = (int)end_x % game->textures->wall_north->width;
 		dir = 1;
 		if (sy == 1)
 			dir = 2;
@@ -76,7 +76,7 @@ int	check_direction(t_game *game, int sx, int sy, int dir)
 	else if (is_touching(game, end_x, end_y - sy)
 		|| is_touching(game, end_x, end_y))
 	{
-		game->tex_x = (int)end_y % BLOCK2;
+		game->tex_x = (int)end_y % game->textures->wall_north->width;
 		dir = 3;
 		if (sx == 1)
 			dir = 4;
@@ -107,8 +107,18 @@ void	draw_h_line(t_game *game, float height, int start_x)
 	float	step;
 
 	color = 0;
+	if (game->side == 1)
+		game->textures->t_print = game->textures->wall_north;
+	else if (game->side == 2)
+		game->textures->t_print = game->textures->wall_south;
+	else if (game->side == 3)
+		game->textures->t_print = game->textures->wall_east;
+	else if (game->side == 4)
+		game->textures->t_print = game->textures->wall_west;
+	else
+		return ;
 	tex_y = 0;
-	step = BLOCK2 / height;
+	step = game->textures->t_print->height / height;
 	if (height > W_HEIGHT)
 	{
 		tex_y = (height - W_HEIGHT) * step / 2;

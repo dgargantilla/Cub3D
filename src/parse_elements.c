@@ -61,18 +61,13 @@ static int handle_texture(t_map *data, char *line, char **texture_path)
 {
     while (*line && *line == ' ')
         line++;
-    
     if (!*line)
     {
         ft_putendl_fd("Error: Missing texture path", 2);
         return (1);
     }
-
-    // Free previous path if it exists
     if (*texture_path)
         free(*texture_path);
-    
-    /* Trim trailing spaces, tabs and CR */
     char *trimmed = ft_strtrim(line, " \t\r\n");
     if (!trimmed)
         return (1);
@@ -83,20 +78,16 @@ static int handle_texture(t_map *data, char *line, char **texture_path)
         ft_putendl_fd("Error: Memory allocation failed", 2);
         return (1);
     }
-
-    // Check if file exists and is readable
     int fd = open(*texture_path, O_RDONLY);
     if (fd == -1)
     {
         perror("open");
         printf("DEBUG: tried to open texture: '%s' (len=%zu)\n", *texture_path, ft_strlen(*texture_path));
-        /* try fallback candidates */
         char *basename = strrchr(*texture_path, '/');
         if (basename)
             basename++;
         else
             basename = *texture_path;
-
         char *cand = ft_strjoin("assets/", basename);
         fd = open(cand, O_RDONLY);
         if (fd != -1)
@@ -119,7 +110,6 @@ static int handle_texture(t_map *data, char *line, char **texture_path)
             return (0);
         }
         free(cand);
-        /* try map directory */
         if (data && data->text)
         {
             char *dup = ft_strdup(data->text);
@@ -147,7 +137,6 @@ static int handle_texture(t_map *data, char *line, char **texture_path)
         return (1);
     }
     close(fd);
-
     return (0);
 }
 

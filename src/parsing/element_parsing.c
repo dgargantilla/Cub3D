@@ -34,6 +34,12 @@ int validate_elements_after_read(t_map *data)
         ft_putendl_fd("Error: No map found in file", 2);
         return (1);
     }
+    // Validate maximum map dimensions (150 width x 10 height)
+    if (data->width >= 150 || data->height >= 150)
+    {
+        ft_putendl_fd("Error: Map dimensions exceed limits (max 150 width x 150 height)", 2);
+        return (1);
+    }
     return (0);
 }
 

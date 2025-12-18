@@ -6,7 +6,7 @@
 /*   By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 11:03:31 by dgargant          #+#    #+#             */
-/*   Updated: 2025/12/05 15:12:27 by dgargant         ###   ########.fr       */
+/*   Updated: 2025/11/26 14:27:35 by dgargant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,8 @@ void	draw_background(t_game *game)
 
 	x = 0;
 	y = 0;
-	rgb = get_rgba(game->map->ceiling.r,
-		game->map->ceiling.g, game->map->ceiling.b, 255);
-	rgb2 = get_rgba(game->map->floor.r,
-		game->map->floor.g, game->map->floor.b, 255);
+	rgb = get_rgba(0, 0, 0, 255);
+	rgb2 = get_rgba(50, 255, 255, 50);
 	while (y <= W_HEIGHT)
 	{
 		x = 0;
@@ -109,9 +107,9 @@ int	get_pixel_from_image(t_game *game, int x, int y, int side)
 		game->textures->t_print = game->textures->wall_west;
 	else
 		return (0);
-	if (!game->textures || !game->textures->t_print)
-		return (get_rgba(255, 0, 255, 255));
-	i = (y * BLOCK2 + x) * game->textures->t_print->bytes_per_pixel;
+	x = x % game->textures->t_print->width;
+	y = y % game->textures->t_print->height;
+	i = (y * game->textures->t_print->width + x) * game->textures->t_print->bytes_per_pixel;
 	pixel = &game->textures->t_print->pixels[i];
 	return ((pixel[0] << 24) | (pixel[1] << 16) | (pixel[2] << 8) | pixel[3]);
 }
