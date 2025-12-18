@@ -6,7 +6,7 @@
 /*   By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 10:22:40 by dgargant          #+#    #+#             */
-/*   Updated: 2025/12/18 12:10:39 by dgargant         ###   ########.fr       */
+/*   Updated: 2025/12/18 15:21:29 by dgargant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,13 @@ void	find_player(t_game *game)
 	}
 }
 
+/*
+	NORTH =  PI + (PI / 2)
+	WEST = PI
+	SOUTH = PI / 2
+	EAST = PI * 2 
+*/
+
 t_player	*init_player(int rgb)
 {
 	t_player	*player;
@@ -60,12 +67,6 @@ t_player	*init_player(int rgb)
 	player->fov = 60;
 	player->speed = 2;
 	player->p_ang = PI / 2;
-	/*
-		NORTH =  PI + (PI / 2)
-		WEST = PI
-		SOUTH = PI / 2
-		EAST = PI * 2 
-	*/
 	player->c_player = rgb;
 	return (player);
 }

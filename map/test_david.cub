@@ -3,7 +3,7 @@ SO assets/gato21.png
 WE assets/gato12.png
 EA assets/pixel-red-brick-wall1.png
 
-F 220,100,
+F 220,100,0
 C 225,30,255
 
 
