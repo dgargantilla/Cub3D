@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_loading.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shirakim <shirakim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 23:32:43 by shirakim          #+#    #+#             */
-/*   Updated: 2025/12/18 12:49:17 by dgargant         ###   ########.fr       */
+/*   Updated: 2025/12/23 14:42:41 by shirakim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,38 +14,46 @@
 
 int	is_config_line(char *line)
 {
-	return (ft_strncmp(line, "NO ", 3) == 0
-		|| ft_strncmp(line, "SO ", 3) == 0
-		|| ft_strncmp(line, "WE ", 3) == 0
-		|| ft_strncmp(line, "EA ", 3) == 0
-		|| ft_strncmp(line, "F ", 2) == 0
-		|| ft_strncmp(line, "C ", 2) == 0
-		|| ft_strlen(line) == 0);
+	int	idx;
+
+	if (!line)
+		return (0);
+	idx = 0;
+	while (line[idx] == ' ' || line[idx] == '\t')
+		idx++;
+	return (ft_strncmp(line + idx, "NO ", 3) == 0
+		|| ft_strncmp(line + idx, "SO ", 3) == 0
+		|| ft_strncmp(line + idx, "WE ", 3) == 0
+		|| ft_strncmp(line + idx, "EA ", 3) == 0
+		|| ft_strncmp(line + idx, "F ", 2) == 0
+		|| ft_strncmp(line + idx, "C ", 2) == 0
+		|| ft_strlen(line + idx) == 0);
+}
+
+char	*process_config_line(char *line)
+{
+	int	len;
+
+	if (!line)
+		return (NULL);
+	len = ft_strlen(line);
+	if (len > 0 && line[len - 1] == '\n')
+		line[len - 1] = '\0';
+	return (line);
 }
 
 char	*skip_config_lines(int fd)
 {
 	char	*line;
-	int		map_started;
 
-	map_started = 0;
-	while ((line = get_next_line(fd)) != NULL)
+	line = get_next_line(fd);
+	while (line)
 	{
-		int len = ft_strlen(line);
-		if (len > 0 && line[len - 1] == '\n')
-			line[len - 1] = '\0';
-		if (!map_started)
-		{
-			if (is_config_line(line))
-			{
-				free(line);
-				continue;
-			}
-			map_started = 1;
-		}
-		if (map_started)
+		line = process_config_line(line);
+		if (!is_config_line(line))
 			return (line);
 		free(line);
+		line = get_next_line(fd);
 	}
 	return (NULL);
 }
@@ -54,6 +62,7 @@ int	load_map_lines(t_map *data, int fd, char *first_line)
 {
 	char	*line;
 	int		i;
+	int		len;
 
 	i = 0;
 	line = first_line;
@@ -69,12 +78,17 @@ int	load_map_lines(t_map *data, int fd, char *first_line)
 		i++;
 		free(line);
 		line = get_next_line(fd);
-		if (line && line[ft_strlen(line) - 1] == '\n')
-			line[ft_strlen(line) - 1] = '\0';
+		if (line)
+		{
+			len = ft_strlen(line);
+			if (len > 0 && line[len - 1] == '\n')
+				line[len - 1] = '\0';
+		}
 	}
 	get_next_line(-1);
 	close(fd);
 	data->map[i] = NULL;
+	data->height = i;
 	return (0);
 }
 

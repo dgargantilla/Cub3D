@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_init.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shirakim <shirakim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 23:20:49 by shirakim          #+#    #+#             */
-/*   Updated: 2025/12/18 12:49:28 by dgargant         ###   ########.fr       */
+/*   Updated: 2025/12/23 14:42:35 by shirakim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,4 +77,5 @@ void	mapa_memory(t_map *data)
 		data->map[i] = NULL;
 		i++;
 	}
+	data->map[data->height] = NULL;
 }

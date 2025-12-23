@@ -1,214 +1,91 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_elements.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: shirakim <shirakim@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/19 12:48:19 by shirakim          #+#    #+#             */
+/*   Updated: 2025/12/23 09:55:13 by shirakim         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/cub3D.h"
 
-static char *get_dirname(char *path)
+int	check_duplicate_texture(t_map *data, const char *id)
 {
-    char *last_slash = ft_strrchr(path, '/');
-    if (!last_slash)
-        return ft_strdup(".");
-    size_t len = last_slash - path;
-    char *dir = malloc(len + 1);
-    if (!dir)
-        return NULL;
-    ft_strlcpy(dir, path, len + 1);
-    return dir;
+	if (ft_strncmp(id, "NO", 2) == 0 && data->textures.north)
+		ft_putendl_fd("Error: Duplicate NO element", 2);
+	else if (ft_strncmp(id, "SO", 2) == 0 && data->textures.south)
+		ft_putendl_fd("Error: Duplicate SO element", 2);
+	else if (ft_strncmp(id, "WE", 2) == 0 && data->textures.west)
+		ft_putendl_fd("Error: Duplicate WE element", 2);
+	else if (ft_strncmp(id, "EA", 2) == 0 && data->textures.east)
+		ft_putendl_fd("Error: Duplicate EA element", 2);
+	else
+		return (0);
+	return (1);
 }
 
-static int is_valid_rgb(int r, int g, int b)
+int	validate_line_continuation(char *start)
 {
-    return (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255);
+	while (*start && (*start == ' ' || *start == '\t'))
+		start++;
+	while (*start && *start != ' ' && *start != '\t')
+		start++;
+	while (*start && (*start == ' ' || *start == '\t'))
+		start++;
+	if (*start != '\0')
+	{
+		ft_putendl_fd("Error: Multiple elements on same line", 2);
+		return (1);
+	}
+	return (0);
 }
 
-static int parse_rgb(char *str, t_color *color)
+static int	parse_line_result(t_map *data, char *line)
 {
-    char **parts;
-    int count;
+	int	result;
 
-    parts = ft_split(str, ',');
-    if (!parts)
-        return (1);
-    
-    // Count parts
-    count = 0;
-    while (parts[count])
-        count++;
-    
-    if (count != 3)
-    {
-        for (int i = 0; parts[i]; i++)
-            free(parts[i]);
-        free(parts);
-        ft_putendl_fd("Error: Invalid RGB format (should be R,G,B)", 2);
-        return (1);
-    }
-
-    // Convert and validate each number
-    color->r = ft_atoi(parts[0]);
-    color->g = ft_atoi(parts[1]);
-    color->b = ft_atoi(parts[2]);
-
-    // Free parts
-    for (int i = 0; parts[i]; i++)
-        free(parts[i]);
-    free(parts);
-
-    if (!is_valid_rgb(color->r, color->g, color->b))
-    {
-        ft_putendl_fd("Error: RGB values must be between 0 and 255", 2);
-        return (1);
-    }
-
-    return (0);
+	result = route_texture_element(data, line);
+	if (result >= 0)
+	{
+		if (result == 0 && ft_strncmp(line, "NO ", 3) == 0)
+			data->got_textures |= 1;
+		else if (result == 0 && ft_strncmp(line, "SO ", 3) == 0)
+			data->got_textures |= 2;
+		else if (result == 0 && ft_strncmp(line, "WE ", 3) == 0)
+			data->got_textures |= 4;
+		else if (result == 0 && ft_strncmp(line, "EA ", 3) == 0)
+			data->got_textures |= 8;
+		return (result);
+	}
+	return (-1);
 }
 
-static int handle_texture(t_map *data, char *line, char **texture_path)
+int	parse_line_element(t_map *data, char *line)
 {
-    while (*line && *line == ' ')
-        line++;
-    
-    if (!*line)
-    {
-        ft_putendl_fd("Error: Missing texture path", 2);
-        return (1);
-    }
+	int	result;
 
-    // Free previous path if it exists
-    if (*texture_path)
-        free(*texture_path);
-    
-    /* Trim trailing spaces, tabs and CR */
-    char *trimmed = ft_strtrim(line, " \t\r\n");
-    if (!trimmed)
-        return (1);
-    *texture_path = ft_strdup(trimmed);
-    free(trimmed);
-    if (!*texture_path)
-    {
-        ft_putendl_fd("Error: Memory allocation failed", 2);
-        return (1);
-    }
-
-    // Check if file exists and is readable
-    int fd = open(*texture_path, O_RDONLY);
-    if (fd == -1)
-    {
-        perror("open");
-        printf("DEBUG: tried to open texture: '%s' (len=%zu)\n", *texture_path, ft_strlen(*texture_path));
-        /* try fallback candidates */
-        char *basename = strrchr(*texture_path, '/');
-        if (basename)
-            basename++;
-        else
-            basename = *texture_path;
-
-        char *cand = ft_strjoin("assets/", basename);
-        fd = open(cand, O_RDONLY);
-        if (fd != -1)
-        {
-            close(fd);
-            free(*texture_path);
-            *texture_path = ft_strdup(cand);
-            free(cand);
-            return (0);
-        }
-        free(cand);
-        cand = ft_strjoin("textures/", basename);
-        fd = open(cand, O_RDONLY);
-        if (fd != -1)
-        {
-            close(fd);
-            free(*texture_path);
-            *texture_path = ft_strdup(cand);
-            free(cand);
-            return (0);
-        }
-        free(cand);
-        /* try map directory */
-        if (data && data->text)
-        {
-            char *dup = ft_strdup(data->text);
-            char *dir = get_dirname(dup);
-            free(dup);
-            char *tmp = ft_strjoin(ft_strjoin(dir, "/"), *texture_path);
-            free(dir);
-            fd = open(tmp, O_RDONLY);
-            if (fd != -1)
-            {
-                close(fd);
-                free(*texture_path);
-                *texture_path = ft_strdup(tmp);
-                free(tmp);
-                return (0);
-            }
-            free(tmp);
-        }
-    }
-    if (fd == -1)
-    {
-        ft_putendl_fd("Error: Cannot open texture file", 2);
-        free(*texture_path);
-        *texture_path = NULL;
-        return (1);
-    }
-    close(fd);
-
-    return (0);
-}
-
-int parse_line_element(t_map *data, char *line)
-{
-    // Remove leading spaces
-    while (*line && (*line == ' ' || *line == '\t'))
-        line++;
-
-    // Skip empty lines or lines with just spaces
-    if (!*line || *line == '\n' || *line == '\r')
-        return (0);
-
-    // Remove trailing newline if present
-    char *newline = ft_strchr(line, '\n');
-    if (newline)
-        *newline = '\0';
-
-    if (ft_strncmp(line, "NO ", 3) == 0)
-    {
-        if (handle_texture(data, line + 3, &data->textures.north) == 0)
-            data->got_textures |= 1;
-    }
-    else if (ft_strncmp(line, "SO ", 3) == 0)
-    {
-        if (handle_texture(data, line + 3, &data->textures.south) == 0)
-            data->got_textures |= 2;
-    }
-    else if (ft_strncmp(line, "WE ", 3) == 0)
-    {
-        if (handle_texture(data, line + 3, &data->textures.west) == 0)
-            data->got_textures |= 4;
-    }
-    else if (ft_strncmp(line, "EA ", 3) == 0)
-    {
-        if (handle_texture(data, line + 3, &data->textures.east) == 0)
-            data->got_textures |= 8;
-    }
-    else if (ft_strncmp(line, "F ", 2) == 0)
-    {
-        if (parse_rgb(line + 2, &data->floor) == 0)
-            data->got_colors |= 1;
-    }
-    else if (ft_strncmp(line, "C ", 2) == 0)
-    {
-        if (parse_rgb(line + 2, &data->ceiling) == 0)
-            data->got_colors |= 2;
-    }
-    else if (ft_strchr("01NSEW", *line))
-    {
-        data->got_map = 1;
-        return (2); // Signal start of map section
-    }
-    else
-    {
-        ft_putendl_fd("Error: Invalid identifier in configuration", 2);
-        return (1);
-    }
-
-    return (0);
+	while (*line && (*line == ' ' || *line == '\t'))
+		line++;
+	if (*line == '\0' || *line == '\n')
+		return (0);
+	result = parse_line_result(data, line);
+	if (result >= 0)
+		return (result);
+	result = route_color_element(data, line);
+	if (result >= 0)
+		return (result);
+	if (*line == '1' || *line == '0')
+		return (2);
+	if (*line == ' ')
+	{
+		while (*line == ' ')
+			line++;
+		if (*line == '1' || *line == '0')
+			return (2);
+	}
+	ft_putendl_fd("Error: Invalid element in configuration file", 2);
+	return (1);
 }

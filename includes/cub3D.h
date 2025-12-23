@@ -124,14 +124,38 @@ void    mapa_memory(t_map *data);
 void    free_textures(t_map *data);
 int     is_config_line(char *line);
 char    *skip_config_lines(int fd);
+char	*process_config_line(char *line);
 int     load_map_lines(t_map *data, int fd, char *first_line);
 int     process_line_for_elements(t_map *data, char *line, int *map_started);
 int     validate_elements_after_read(t_map *data);
+int     route_color_element(t_map *data, char *line);
 void    free_map_array(t_map *data);
 void    exit_game(t_map *data, int exit_code);
 
 /* Element parsing functions */
 int     parse_line_element(t_map *data, char *line);
+int     route_texture_element(t_map *data, char *line);
+int     route_color_element(t_map *data, char *line);
+int     parse_texture_element(t_map *data, char *line, const char *id);
+
+/* RGB parsing functions */
+int     parse_rgb(char *str, t_color *color);
+int     is_valid_rgb(int r, int g, int b);
+int     parse_color_element(t_map *data, char *line, char id);
+void    free_parts(char **parts);
+
+/* Forward declarations from parse_elements.c */
+int	check_duplicate_texture(t_map *data, const char *id);
+int	validate_line_continuation(char *start);
+
+
+
+/* Texture parsing functions */
+int     try_asset_path(char **texture_path, const char *prefix);
+int     try_texture_paths(char **texture_path);
+int     check_texture_file(char **texture_path);
+int     prepare_texture_path(char *line, char **texture_path);
+int	    handle_texture(t_map *data, char *line, char **texture_path);
 
 /* Map validation functions */
 int     validate_map(t_map *data);
@@ -143,11 +167,25 @@ void    exit_error(char *message);
 void    ft_check_borders(t_map *data);
 int     validate_top_bottom_borders(t_map *data);
 int     validate_sides_borders(t_map *data);
+int     validate_walkable_spaces(t_map *data);
 int     check_player_count(int player_count);
+int     validate_map_space(t_map *data);
+int     is_valid_neighbor(char c);
+int     is_walkable_space(char c);
+int     check_all_neighbors(t_map *data, int i, int j, int row_len);
+/* Maps validation utils helpers */
+int     find_first_non_space(char *line, int row_len);
+int     find_last_non_space(char *line, int row_len);
+int     check_border_chars(char *line, int first, int last);
+int     check_internal_spaces(char *line, int first, int last);
+int     validate_line_borders(char *line, int row_len);
+int     is_walkable_char(char c);
+int     check_walkable_position(t_map *data, int i, int j, int row_len);
+
 
 /* Game initialization functions */
 t_game *init_game(t_map *map);
-void init_variables(t_map *map, char *filename);
+//void init_variables(t_map *map, char *filename);
 
 /* utils */
 int     get_rgba(int r, int g, int b, int a);
@@ -159,6 +197,7 @@ t_game      *init_game(t_map *map);
 //void        *ft_memset(void *b, int c, size_t len);
 void        ft_move_hook(void *param);
 //void        get_map(t_game *game);
+void check_mlx_textures(t_game *game);
 
 /* Init player */
 void	    check_orientation(t_game *game, char c);

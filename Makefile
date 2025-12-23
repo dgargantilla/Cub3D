@@ -6,7 +6,7 @@
 #    By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/29 08:50:12 by dgargant          #+#    #+#              #
-#    Updated: 2025/12/15 10:25:49 by dgargant         ###   ########.fr        #
+#    Updated: 2025/12/22 15:36:35 by dgargant         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,8 +47,9 @@ SRCS_FILES := \
 	$(addprefix core/, draw_game.c	draw_map.c	draw_utils.c	init_textures.c	destroy.c)	\
 	$(addprefix player/, init_player.c	movement.c)	\
 	$(addprefix utils/, utils.c)	\
-	$(addprefix map/, mapa_read.c	map_loading.c	map_init.c	map_cleanup.c	map_validation.c	maps_validations_utils.c)	\
-	$(addprefix parsing/, element_parsing.c	parse_elements.c)	\
+	$(addprefix map/, mapa_read.c	map_validation.c	map_loading.c	map_init.c	map_cleanup.c	map_validation_utils.c\
+		map_player_validation.c	map_borders_validation.c	map_walkable_validation.c)	\
+	$(addprefix parsing/, element_parsing.c	parse_elements.c	parse_elements_utils.c	parse_rgb.c	parse_texture.c)	\
 	get_next_line.c	\
 
 

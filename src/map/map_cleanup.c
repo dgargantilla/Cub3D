@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_cleanup.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shirakim <shirakim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 23:11:25 by shirakim          #+#    #+#             */
-/*   Updated: 2025/12/18 12:49:23 by dgargant         ###   ########.fr       */
+/*   Updated: 2025/12/23 14:42:34 by shirakim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ void	free_map_array(t_map *data)
 {
 	int	i;
 
+	i = 0;
 	if (data->map)
 	{
-		i = 0;
 		while (data->map[i])
 		{
 			free(data->map[i]);
@@ -29,7 +29,7 @@ void	free_map_array(t_map *data)
 	}
 	if (data->text)
 	{
-		free (data->text);
+		free(data->text);
 		data->text = NULL;
 	}
 }

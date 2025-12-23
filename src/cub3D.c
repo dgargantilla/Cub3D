@@ -6,12 +6,22 @@
 /*   By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:30:01 by dgargant          #+#    #+#             */
-/*   Updated: 2025/12/18 15:25:11 by dgargant         ###   ########.fr       */
+/*   Updated: 2025/12/23 11:07:04 by dgargant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 #include "../libft/libft.h"
+
+/*void	*ft_memset(void *b, int c, size_t len)
+{
+	unsigned char	*p;
+
+	p = b;
+	while (len-- > 0)
+		*p++ = (unsigned char)c;
+	return (b);
+}*/
 
 void	ft_move_hook(void *param)
 {
@@ -19,27 +29,47 @@ void	ft_move_hook(void *param)
 
 	game = (t_game *)param;
 	if (mlx_is_key_down(game->mlx, MLX_KEY_ESCAPE))
+	{
+		//mlx_close_window(game->mlx);
+		//return ;
 		destroy_all(game);
+	}
 	move_player(game);
 }
 
+/*void	get_map(t_game *game)
+{
+	game->map->map = malloc(sizeof(char *) * 11);
+	game->map->map[0] = "11111111111";
+	game->map->map[1] = "10000000001";
+	game->map->map[2] = "10000000001";
+	game->map->map[3] = "10001111001";
+	game->map->map[4] = "10000N01001";
+	game->map->map[5] = "10000001001";
+	game->map->map[6] = "10000000001";
+	game->map->map[7] = "10001000001";
+	game->map->map[8] = "10001000001";
+	game->map->map[9] = "11111111111";
+	game->map->map[10] = NULL;
+	game->map->width = 11;
+	game->map->height = 11;
+}*/
+
 t_game	*init_game(t_map *map)
 {
-	t_game		*game;
-	mlx_t		*mlx;
-	mlx_image_t	*img;
+	t_game	*game;
 
-	game = ft_calloc(1, sizeof(t_game));
+	game = ft_calloc(1,sizeof(t_game));
 	if (!game)
 		return (NULL);
-	mlx = mlx_init(W_WIDTH, W_HEIGHT, "Cub3D", true);
+	mlx_t *mlx = mlx_init(W_WIDTH, W_HEIGHT, "Cub3D", true);
 	if (!mlx)
-		return (NULL);
+		return(NULL);
 	game->side = 1;
 	game->mlx = mlx;
 	game->map = map;
 	mlx_set_window_limit(game->mlx, W_WIDTH, W_HEIGHT, W_WIDTH, W_HEIGHT);
-	img = mlx_new_image(game->mlx, W_WIDTH + 1, W_HEIGHT + 1);
+	mlx_image_t* img = mlx_new_image(game->mlx, W_WIDTH + 1, W_HEIGHT + 1);
 	if (!img || (mlx_image_to_window(game->mlx, img, 0, 0) < 0))
 		ft_error();
 	game->img = img;
@@ -47,6 +77,7 @@ t_game	*init_game(t_map *map)
 	find_player(game);
 	check_orientation(game, game->map->player_dir);
 	game->textures = init_textures(game);
+	check_mlx_textures(game);
 	mlx_loop_hook(game->mlx, ft_move_hook, game);
 	return (game);
 }

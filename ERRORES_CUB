@@ -1,0 +1,149 @@
+
+
+------------------------------------------------------------
+LEAK (DEFINITELY LOST)
+Aparece cuando hay un error de busqueda de texturas
+Tambien aparece cuando compruebas si hay bordes
+archivo parse_elements funcion handle_texture
+leack = *texture_path = ft_strdup(trimmed);
+
+------------------------------------------------------------
+LEAK (INDIRECTLY LOST)
+
+Cuando hay un error en el mapa no se libera el mapa
+------------------------------------------------------------
+
+LEAK Still reachable 
+al comprobar si hay un elemento que no sea valido hay leaks
+en update_storage del gnl, supongo que es porque paras a mitad
+de archivo de leer al encontrar un error y se queda memoria sin 
+liberar en la estatica
+
+1111111111
+2222222222
+3333333333
+4444444444
+5555555555
+6666666666
+7777777777
+8888888888
+9999999999
+
+-----------------------------------------------------------------
+
+Error de validaccion :
+
+
+NO assets/gato12.png		assets/gato2.png
+SO assets/gato21.png
+WE assets/gato12.png
+EA assets/pixel-red-brick-wall.png
+
+F 220,100,0
+C 225,30,255
+
+11111111111111111111111
+10000100001000001110011
+10000000001000000001011
+10N00110000000000010011
+10000001001000100000111
+10001001010000000000011
+11111111111111111111111
+
+(hasta aqui arreglados)
+
+---------------------------------------------------------------------------
+
+posible segfault
+
+NO assets/pngegg.png
+SO assets/gato21.png
+WE assets/gato12.png
+EA assets/pixel-red-brick-wall1.png
+
+F 220,100,0
+C 225,30,255
+
+      11111
+      11011
+      1101
+11111111011111111111111
+10000100001000001110011
+10000000001000000001011111111
+10E001100000000000100000000001
+10000001001000100000111111111
+10001001010000000000011
+11111111110111111111111
+        110111     1111
+        111111     111111
+
+
+esto es lo que se guarda en el mapa:
+
+
+      11111en_US.UTF-8
+      11011      1101
+      1101en_US.UTF-8
+111111110111111111111111111
+10000100001000001110011
+10000000001000000001011111111
+10E001100000000000100000000001
+10000001001000100000111111111
+10001001010000000000011
+11111111110111111111111
+        110111     1111
+        111111     111111111
+
+esto puede ser porque no se guarda el nulo bien al final de esos punteros
+
+-----------------------------------------------------------------------------
+
+da error y leacks cuando hay espacios antes de las texturas:
+
+NO assets/pngegg.png
+      SO assets/gato21.png
+WE assets/gato12.png
+EA assets/pixel-red-brick-wall1.png
+
+F 220,100,0
+C 225,30,255
+
+      11111
+      11011
+      1101    
+11111111011111111111111
+10000100001000001110011
+10000000001000000001011111111
+10E001100000000000100000000001
+10000001001000100000111111111
+10001001010000000000011
+11111111110111111111111
+        110111     1111
+        111111     111111
+
+
+
+---------------------------------------------------------------------------------
+
+da error cuando no deberia
+
+NO assets/pngegg.png
+SO assets/gato21.png
+WE assets/gato12.png
+EA assets/gato32.png
+
+F 220,100,0
+C 225,30,255
+
+      11111
+      11011
+      11011     
+1111111101111111111111
+10000100001000001110011
+10000000001000000001011111111
+10E001100000000000100000000001
+10000001001000100000111111111
+10001001010000000000011
+11111111110111111111111
+        110111     1111
+        111111     111111

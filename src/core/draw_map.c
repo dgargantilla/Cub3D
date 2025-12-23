@@ -6,7 +6,7 @@
 /*   By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 11:10:17 by dgargant          #+#    #+#             */
-/*   Updated: 2025/12/18 15:15:44 by dgargant         ###   ########.fr       */
+/*   Updated: 2025/12/23 11:24:10 by dgargant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ void	draw_map(t_game	*game)
 	y = 0;
 	x = 0;
 	map = game->map->map;
-	if (game->map->width > 50 || game->map->height > 50)
-		return ;
+	if (game->map->width > 30 || game->map->height > 15)
+		return;
 	while (map[y])
 	{
 		x = 0;
