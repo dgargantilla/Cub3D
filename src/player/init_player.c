@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_player.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shirakim <shirakim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 10:22:40 by dgargant          #+#    #+#             */
-/*   Updated: 2025/12/23 14:52:06 by dgargant         ###   ########.fr       */
+/*   Updated: 2025/12/23 16:03:48 by shirakim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,16 +34,17 @@ void	find_player(t_game *game)
 	while (game->map->map[y] != NULL)
 	{
 		x = 0;
-		while (x <= game->map->width)
+		while (game->map->map[y][x] != '\0')
 		{
 			c = game->map->map[y][x];
 			if (c == 'N' || c == 'S' || c == 'E' || c == 'W' )
 			{
 				game->player->s_pos_y = (double)y * BLOCK2;
 				game->player->s_pos_x = (double)x * BLOCK2;
-				//return;
+				game->map->player_dir = c;
+				return;
 			}
-			printf("%c",c);
+			printf("%c", c);
 			x++;
 		}
 		printf("\n");

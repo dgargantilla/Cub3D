@@ -14,7 +14,9 @@
 
 static int	validate_borders(t_map *data)
 {
-	if (!validate_top_bottom_borders(data))
+	if (!validate_line_borders(data->map[0], ft_strlen(data->map[0])))
+		return (0);
+	if (!validate_line_borders(data->map[data->height - 1], ft_strlen(data->map[data->height - 1])))
 		return (0);
 	if (!validate_sides_borders(data))
 		return (0);

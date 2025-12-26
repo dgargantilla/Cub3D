@@ -6,7 +6,7 @@
 /*   By: shirakim <shirakim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 23:32:43 by shirakim          #+#    #+#             */
-/*   Updated: 2025/12/23 14:42:41 by shirakim         ###   ########.fr       */
+/*   Updated: 2025/12/23 16:00:07 by shirakim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ char	*skip_config_lines(int fd)
 	line = get_next_line(fd);
 	while (line)
 	{
+		 printf("DEBUG skip_config_lines: Processing line: '%s'\n", line);
 		line = process_config_line(line);
 		if (!is_config_line(line))
 			return (line);
@@ -75,6 +76,7 @@ int	load_map_lines(t_map *data, int fd, char *first_line)
 			close(fd);
 			return (1);
 		}
+		 printf("DEBUG load_map_lines: Stored line %d: '%s'\n", i, data->map[i]);
 		i++;
 		free(line);
 		line = get_next_line(fd);

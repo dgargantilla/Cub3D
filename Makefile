@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+         #
+#    By: shirakim <shirakim@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/29 08:50:12 by dgargant          #+#    #+#              #
-#    Updated: 2025/12/22 15:36:35 by dgargant         ###   ########.fr        #
+#    Updated: 2025/12/23 15:49:33 by shirakim         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ CC          = cc
 #-fsanitize=leak -g3 -O0
 
 INC         = includes/
-CFLAGS      = -Wall -Wextra -Werror -fsanitize=leak -g3 -I$(INC)
+CFLAGS      = -Wall -Wextra -Werror -g3 -I$(INC)
 
 OBJS_DIR    = objs/
 

@@ -29,13 +29,15 @@ int validate_top_bottom_borders(t_map *data)
 int validate_sides_borders(t_map *data)
 {
     int i;
+    int len;
 
     i = 0;
     while (i < data->height)
     {
-        if (data->map[i][0] != '1')
+        len = ft_strlen(data->map[i]);
+        if (len > 0 && data->map[i][0] != '1')
             return (0);
-        if (data->map[i][data->width - 1] != '1')
+        if (len > 0 && data->map[i][len - 1] != '1')
             return (0);
         i++;
     }
