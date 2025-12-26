@@ -6,25 +6,24 @@
 /*   By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 12:47:22 by dgargant          #+#    #+#             */
-/*   Updated: 2025/12/23 11:05:29 by dgargant         ###   ########.fr       */
+/*   Updated: 2025/12/26 13:08:53 by dgargant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-
 t_textures	*init_textures(t_game *game)
 {
 	t_textures	*texture;
-	const char	*tNorth;
-	const char	*tSouth;
-	const char	*tEast;
-	const char	*tWest;
+	const char	*tnorth;
+	const char	*tsouth;
+	const char	*teast;
+	const char	*twest;
 
-	tNorth = game->map->textures.north;
-	tSouth = game->map->textures.south;
-	tEast = game->map->textures.east;
-	tWest = game->map->textures.west;
+	tnorth = game->map->textures.north;
+	tsouth = game->map->textures.south;
+	teast = game->map->textures.east;
+	twest = game->map->textures.west;
 	texture = malloc(sizeof(t_textures));
 	if (texture == NULL)
 		return (NULL);
@@ -32,15 +31,14 @@ t_textures	*init_textures(t_game *game)
 	texture->wall_south = NULL;
 	texture->wall_east = NULL;
 	texture->wall_west = NULL;
-	texture->wall_north = mlx_load_png(tSouth);
-	texture->wall_south = mlx_load_png(tNorth);
-	texture->wall_east = mlx_load_png(tWest);
-	texture->wall_west = mlx_load_png(tEast);
+	texture->wall_north = mlx_load_png(tsouth);
+	texture->wall_south = mlx_load_png(tnorth);
+	texture->wall_east = mlx_load_png(twest);
+	texture->wall_west = mlx_load_png(teast);
 	return (texture);
 }
 
-
-void check_mlx_textures(t_game *game)
+void	check_mlx_textures(t_game *game)
 {
 	if (!game->textures->wall_north)
 		destroy_all(game);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_player.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shirakim <shirakim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 10:22:40 by dgargant          #+#    #+#             */
-/*   Updated: 2025/12/23 16:03:48 by shirakim         ###   ########.fr       */
+/*   Updated: 2025/12/26 13:09:46 by dgargant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,10 @@ void	find_player(t_game *game)
 			{
 				game->player->s_pos_y = (double)y * BLOCK2;
 				game->player->s_pos_x = (double)x * BLOCK2;
-				game->map->player_dir = c;
-				return;
+				return ;
 			}
-			printf("%c", c);
 			x++;
 		}
-		printf("\n");
 		y++;
 	}
 }
@@ -64,12 +61,6 @@ t_player	*init_player(int rgb)
 	player->fov = 60;
 	player->speed = 2;
 	player->p_ang = PI / 2;
-	/*
-		NORTH =  PI + (PI / 2)
-		WEST = PI
-		SOUTH = PI / 2
-		EAST = PI * 2 
-	*/
 	player->c_player = rgb;
 	return (player);
 }

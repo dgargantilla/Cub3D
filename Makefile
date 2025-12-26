@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: shirakim <shirakim@student.42.fr>          +#+  +:+       +#+         #
+#    By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/29 08:50:12 by dgargant          #+#    #+#              #
-#    Updated: 2025/12/23 15:49:33 by shirakim         ###   ########.fr        #
+#    Updated: 2025/12/26 14:21:32 by dgargant         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,17 +60,6 @@ OBJS        = $(addprefix $(OBJS_DIR), $(OBJS_FILES))
 
 all: $(NAME)
 
-#libft/libft.a:
-#	@make -C libft
-#	@cp libft/bin/libft.a libft/libft.a
-#	@cp libft/bin/libft.a .
-#	@echo "$(GREEN)libft.a created!$(RESET)"
-
-$(LIBFT):
-	@echo "Compiling $(BLUE)libft$(RESET)\n"
-	@make -sC $(LIBFT_DIR)
-
-
 $(NAME): libmlx libft/libft.a $(OBJS)
 	@echo "Compiling $(BLUE)$(NAME)$(RESET)"
 	@$(CC) $(CFLAGS) $(MLX_IN) $(OBJS) $(MLX_EX) $(LIBFT) -o $(NAME)
@@ -84,10 +73,15 @@ libmlx:
 $(OBJS_DIR)%.o: $(SRCS_DIR)%.c
 	@[ -d $(dir $@) ] || mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) -c $< -o $@
+	
+$(LIBFT):
+	@echo "Compiling $(BLUE)libft$(RESET)\n"
+	@make -sC $(LIBFT_DIR)
 
 clean:
 	rm -rf $(OBJS_DIR)
 	rm -rf $(MLX)/build
+	make fclean -sC $(LIBFT_DIR)
 
 fclean: clean
 	rm -f $(NAME)
@@ -95,10 +89,6 @@ fclean: clean
 
 re: fclean all
 
-test: test_main.c src/mapa_read.c src/get_next_line.c src/map_validation.c $(LIBFT)
-	@echo "$(CYAN)Compiling test program...$(RESET)"
-	$(CC) $(CFLAGS) test_main.c src/mapa_read.c src/get_next_line.c src/map_validation.c $(LIBFT) -o test_cub3d
-	@echo "$(GREEN)Test program compiled!$(RESET)"
 
 .PHONY: all clean fclean re test
 .SILENT: all clean fclean
