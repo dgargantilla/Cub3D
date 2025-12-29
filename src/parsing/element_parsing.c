@@ -6,7 +6,7 @@
 /*   By: shirakim <shirakim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 12:48:19 by shirakim          #+#    #+#             */
-/*   Updated: 2025/12/23 09:55:07 by shirakim         ###   ########.fr       */
+/*   Updated: 2025/12/29 11:42:34 by shirakim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ int	read_lines_from_file(t_map *data)
 		{
 			free(line);
 			close(fd);
+			get_next_line(-1);
 			return (1);
 		}
 		free(line);

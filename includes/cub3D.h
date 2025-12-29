@@ -6,7 +6,7 @@
 /*   By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:29:41 by dgargant          #+#    #+#             */
-/*   Updated: 2025/12/26 13:04:40 by dgargant         ###   ########.fr       */
+/*   Updated: 2025/12/29 14:35:53 by dgargant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 # define BLOCK2 64
 # define T_WIDTH 64
 # define T_HEIGHT 64
+# define BUFFER_SIZE 1024
 
 typedef struct s_player
 {
@@ -137,6 +138,16 @@ int			route_color_element(t_map *data, char *line);
 char		*process_config_line(char *line);
 
 char		*get_next_line(int fd);
+
+void		gnl_clear(void);
+
+char		*extract_line(char *storage);
+
+char		*update_storage(char *storage);
+
+char		*read_file(int fd, char *storage);
+
+char		*join_and_free(char *storage, char *buffer);
 
 char		*skip_config_lines(int fd);
 

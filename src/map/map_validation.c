@@ -6,7 +6,7 @@
 /*   By: shirakim <shirakim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 14:20:36 by shirakim          #+#    #+#             */
-/*   Updated: 2025/12/23 09:54:44 by shirakim         ###   ########.fr       */
+/*   Updated: 2025/12/26 12:14:41 by shirakim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ static int	validate_borders(t_map *data)
 {
 	if (!validate_line_borders(data->map[0], ft_strlen(data->map[0])))
 		return (0);
-	if (!validate_line_borders(data->map[data->height - 1], ft_strlen(data->map[data->height - 1])))
+	if (!validate_line_borders(data->map[data->height - 1],
+			ft_strlen(data->map[data->height - 1])))
 		return (0);
 	if (!validate_sides_borders(data))
 		return (0);

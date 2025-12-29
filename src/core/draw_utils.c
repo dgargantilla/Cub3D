@@ -6,7 +6,7 @@
 /*   By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 11:03:31 by dgargant          #+#    #+#             */
-/*   Updated: 2025/12/26 13:07:06 by dgargant         ###   ########.fr       */
+/*   Updated: 2025/12/29 14:38:42 by dgargant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,33 +65,6 @@ double	distance(double x, double y)
 {
 	return (sqrt((x * x) + (y * y)));
 }
-
-/*double	distance(float x1, float y1, float x2, float y2)
-{
-	return (sqrtf((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
-}*/
-
-/*double	view_lane_distance(t_game *game,float x1, float y1, float angle)
-{
-	//float	x2;
-	//float	y2;
-	float	player_angle;
-	float	raw_distance;
-	double	adjusted_distance;
-
-	//x2 = 0;
-	//y2 = 0;
-	player_angle = 0;
-	raw_distance = 0;
-	adjusted_distance = 0;
-	//x2 = game->player->s_pos_x;
-	//y2 = game->player->s_pos_x;
-	player_angle = game->player->p_ang;
-	//raw_distance = distance(x1, y1, x2, y2);
-	raw_distance = distance(x1, y1);
-	adjusted_distance = raw_distance * cos(player_angle - angle);
-	return (adjusted_distance);
-}*/
 
 int	get_pixel_from_image(t_game *game, int x, int y, int side)
 {

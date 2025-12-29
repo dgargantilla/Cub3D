@@ -6,22 +6,12 @@
 /*   By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:30:01 by dgargant          #+#    #+#             */
-/*   Updated: 2025/12/26 13:12:38 by dgargant         ###   ########.fr       */
+/*   Updated: 2025/12/29 14:37:41 by dgargant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 #include "../libft/libft.h"
-
-/*void	*ft_memset(void *b, int c, size_t len)
-{
-	unsigned char	*p;
-
-	p = b;
-	while (len-- > 0)
-		*p++ = (unsigned char)c;
-	return (b);
-}*/
 
 void	ft_move_hook(void *param)
 {
@@ -34,24 +24,6 @@ void	ft_move_hook(void *param)
 	}
 	move_player(game);
 }
-
-/*void	get_map(t_game *game)
-{
-	game->map->map = malloc(sizeof(char *) * 11);
-	game->map->map[0] = "11111111111";
-	game->map->map[1] = "10000000001";
-	game->map->map[2] = "10000000001";
-	game->map->map[3] = "10001111001";
-	game->map->map[4] = "10000N01001";
-	game->map->map[5] = "10000001001";
-	game->map->map[6] = "10000000001";
-	game->map->map[7] = "10001000001";
-	game->map->map[8] = "10001000001";
-	game->map->map[9] = "11111111111";
-	game->map->map[10] = NULL;
-	game->map->width = 11;
-	game->map->height = 11;
-}*/
 
 t_game	*init_game(t_map *map)
 {
@@ -107,5 +79,6 @@ int	main(int ac, char **av)
 	game = init_game(&map);
 	mlx_loop(game->mlx);
 	destroy_all(game);
+	get_next_line(-1);
 	return (EXIT_SUCCESS);
 }

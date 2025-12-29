@@ -6,57 +6,11 @@
 /*   By: dgargant <dgargant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 11:02:33 by dgargant          #+#    #+#             */
-/*   Updated: 2025/12/23 10:01:07 by dgargant         ###   ########.fr       */
+/*   Updated: 2025/12/29 14:39:00 by dgargant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
-
-/*void draw_raycast(t_game *game, double start_x, int rgb, int i)
-{
-	double cos_ang = cos(start_x);
-	double sin_ang = sin(start_x);
-	double ray_y = game->player->s_pos_y;
-	double ray_x = game->player->s_pos_x;
-	while (!touch(ray_y, ray_x, game))
-	{
-		ray_x += cos_ang;
-		ray_y += sin_ang;	
-	}
-	//write(1, "aqui peta", 12);
-	double dist = fix_distance(game, ray_x, ray_y);
-	if (dist == 0)
-		dist = 0.1;
-	double height = (BLOCK2 / dist) * (W_WIDTH / 2);
-	double start_y = (W_HEIGHT - height) / 2;
-	if (start_y <= 0)
-		start_y = 1;
-	double end = start_y + height;
-	if (end >= W_HEIGHT)
-		end = W_HEIGHT - 1;
-	while (start_y < end)
-	{
-		mlx_put_pixel(game->img, i, start_y, rgb);
-		start_y++;
-	}
-}
-
-void raycast(t_game *game)
-{
-	int rgb;
-	
-	rgb = get_rgba(0, 0, 255, 255);
-	double	fraction = PI / 3 / W_WIDTH;
-	double	start_x = game->player->p_ang - PI / 6;
-	int i = 0;
-	while (i < W_WIDTH)
-	{
-		game->tex_x = start_x * T_WIDTH;
-		draw_raycast(game, start_x, rgb, i);
-		start_x += fraction;
-		i++;
-	}
-}*/
 
 int	check_direction(t_game *game, int sx, int sy, int dir)
 {
